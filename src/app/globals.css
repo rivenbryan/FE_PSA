@@ -74,3 +74,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .btn-main {
+    @apply text-white;
+    @apply text-sm;
+    @apply font-medium;
+    @apply bg-gray-600;
+    @apply hover:bg-blue-900;
+    @apply focus:outline-none;
+    @apply focus:ring-4;
+    @apply focus:ring-gray-300;
+    @apply rounded-none;
+    @apply px-5;
+    @apply py-2;
+  }
+}
