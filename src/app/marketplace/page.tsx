@@ -1,6 +1,9 @@
 import { tempProducts } from "~/tempData";
 import { Marketplace } from "@/components/marketplace";
 
-export default function StoresCategoryPage() {
+export default async function StoresCategoryPage() {
+    try {
+        
+    }
   return <Marketplace items={tempProducts} />;
 }
