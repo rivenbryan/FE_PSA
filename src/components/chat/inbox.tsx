@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+require('dotenv').config();
 
 
 type Chat = {
@@ -14,12 +15,14 @@ type Chat = {
 };
 
 export default function Inbox() {
+  const API_URL='http://localhost:3000';
+  console.log(API_URL);
   const [chats, setChats] = useState<Chat[]>([]);
   const [userEmail, setUserEmail] = useState<string>('');
   // Function to fetch chat data
   const fetchChatData = () => {
     axios
-      .get(`http://localhost:3000/api/v1/chat/list?Email=${userEmail}`)
+      .get(`${API_URL}/api/v1/chat/list?Email=${userEmail}`)
       .then((response) => {
         const data = response.data;
         setChats(data); // Assuming the data is an array of chat messages
@@ -55,7 +58,7 @@ export default function Inbox() {
       />
       <ul>
         {chats.map((chat) => (
-          <li key={chat.senderEmail}>
+          <li key={chat.id}>
             <div>
             <Link
             href={{

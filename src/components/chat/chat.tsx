@@ -19,6 +19,7 @@ type Chat = {
 
 export default function ChatComponent() {
   const router=useRouter();
+  const API_URL='http://localhost:3000';
   const query = useSearchParams()
   const senderEmail= query.get('senderEmail');
   const receiverEmail= query.get('receiverEmail');
@@ -29,7 +30,7 @@ export default function ChatComponent() {
   const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
   useEffect(() => {
     // Fetch all chats and list senderEmails in previousChats
-    axios.get(`http://localhost:3000/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
+    axios.get(`${API_URL}/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
       .then((response) => {
         const chatData = response.data;
         setCombinedMessages(chatData);
@@ -41,7 +42,7 @@ export default function ChatComponent() {
   useEffect(() => {
     if (senderEmail) {
       // Connect to the WebSocket server when userEmail is set
-      const newSocket = io('http://localhost:3000', {
+      const newSocket = io(`${API_URL}`, {
         query: { email: senderEmail, listingId: listingId },
       });
 
@@ -81,7 +82,7 @@ export default function ChatComponent() {
       };
   
       // Send a message to the server in the desired format
-      axios.post('http://localhost:3000/api/v1/chat', messageData)
+      axios.post(`${API_URL}/api/v1/chat`, messageData)
       .then((response) => {
         // Handle the response from the server if needed
         console.log('Message sent successfully', response.data);
