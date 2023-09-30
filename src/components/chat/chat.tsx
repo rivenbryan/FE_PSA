@@ -1,8 +1,9 @@
-'use-client'
+"use client"
 import React, { useEffect, useState } from 'react';
+import { useRouter } from "next/navigation";
 // eslint-disable-next-line
 import { io, Socket } from 'socket.io-client';
-
+import { useSearchParams } from 'next/navigation'
 import axios from 'axios'; // Import Axios
 
 
@@ -15,16 +16,32 @@ type Chat = {
 };
 
 export default function ChatComponent() {
+  const router=useRouter();
+  const query = useSearchParams()
+  const senderEmail= query.get('senderEmail');
+  const receiverEmail= query.get('receiverEmail');
+  console.log(receiverEmail);
+  console.log(senderEmail);
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
   const [socket, setSocket] = useState<Socket | null>(null); // Initialize as null
-  const [userEmail, setUserEmail] = useState<string>('')
-  const [receiverEmail, setReceiverEmail] = useState<string>('')
+  const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
   useEffect(() => {
-    if (userEmail) {
+    // Fetch all chats and list senderEmails in previousChats
+    axios.get(`http://localhost:3000/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}`)
+      .then((response) => {
+        const chatData = response.data;
+        setCombinedMessages(chatData);
+      })
+      .catch((error) => {
+        console.error('Error fetching chat data:', error);
+      });
+  }, []);
+  useEffect(() => {
+    if (senderEmail) {
       // Connect to the WebSocket server when userEmail is set
       const newSocket = io('http://localhost:3000', {
-        query: { email: userEmail },
+        query: { email: senderEmail },
       });
 
       newSocket.on('connect_error', (error) => {
@@ -42,7 +59,7 @@ export default function ChatComponent() {
         newSocket.disconnect();
       };
     }
-  }, [userEmail]);
+  }, []);
 
   useEffect(() => {
     if (!socket) return;
@@ -56,7 +73,7 @@ export default function ChatComponent() {
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
       const messageData = {
-        senderEmail: userEmail,
+        senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         messageContent: newMessage,
       };
@@ -79,27 +96,38 @@ export default function ChatComponent() {
 
   return (
     <div className="chat-container">
-        <div className="chat-email-input">
+        {/* <div className="chat-email-input">
         <input
           type="text"
           placeholder="Enter your email"
           value={userEmail}
           onChange={(e) => setUserEmail(e.target.value)} // Update userEmail state
         />
-      </div>
-      <div className="chat-email-input">
+      </div> */}
+      {/* <div className="chat-email-input">
         <input
           type="text"
           placeholder="Enter your reveiver email"
           value={receiverEmail}
           onChange={(e) => setReceiverEmail(e.target.value)} // Update userEmail state
         />
+      </div> */}
+      <div className="previous-chats">
+      <h2>Combined Messages</h2>
+        {combinedMessages.map((message: Chat, index: number) => (
+          <div key={index} className="message">
+            <span>{message.senderEmail}:</span> 
+            <span>{message.messageContent}</span>
+            <span>{new Date(message.timestamp).toLocaleString()}</span>
+          </div>
+        ))}
       </div>
       <div className="chat-messages">
         {messages.map((message: Chat, index: number) => (
           <div key={index} className="message">
             <span>{message.senderEmail}: </span>
             <span>{message.messageContent}</span>
+            <span>{new Date().toLocaleString()}</span>
           </div>
         ))}
       </div>
