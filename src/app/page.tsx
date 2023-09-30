@@ -13,10 +13,7 @@ export default function Home() {
           cardContent={<CardContentForTotalRevenue />}
         />
       </div>
-      <div className="flex gap-10">
-
-       
-      </div>
+      <div className="flex gap-10"></div>
       <div className="flex gap-10">
         <DashboardCard
           cardTitle="Utilization Rate"
