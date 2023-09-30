@@ -239,7 +239,11 @@ export default async function MarketPlacePage() {
                         </div>
                       </div>
                       <Separator className="my-4" />
-                      <MyListingPage />
+                      <MyListingPage
+                        portData={portData}
+                        containerTypes={containerTypesData}
+                        goodsClassifications={goodsClassificationData}
+                      />
                     </TabsContent>
                   </Tabs>
                 </div>

@@ -67,11 +67,13 @@ const addListingFormSchema = z.object({
   containerType: z.string(),
   typeDangGoods: z.string(),
   price: z.string(),
+  sold: z.boolean(),
 });
 
 type AccountFormValues = z.infer<typeof addListingFormSchema>;
 
 const defaultValues: Partial<AccountFormValues> = {
+  sold: false,
   // "id": 7,
   // "created_at": "2023-09-30T07:50:17.316263+00:00",
   // "leasingOwner": "xiezijian99@gmail.com",
@@ -420,7 +422,7 @@ export function AddListingForm({
               />
             </div>
           </div>
-          <DialogFooter>
+          <DialogFooter className="pb-1">
             <Button type="submit">Submit Listing</Button>
           </DialogFooter>
         </form>

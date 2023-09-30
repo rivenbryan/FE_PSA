@@ -10,10 +10,34 @@ import {
 } from "@/registry/new-york/ui/dialog";
 import { Input } from "@/registry/new-york/ui/input";
 import { Label } from "@/registry/new-york/ui/label";
+import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
+import { AddListingForm } from "./AddListingForm";
+import {
+  ContainerType,
+  GoodsClassification,
+  Port,
+} from "@/app/marketplace/page";
+import { cn } from "@/lib/utils";
 
-export function MyListingPage() {
+interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
+  portData: Port[];
+  containerTypes: ContainerType[];
+  goodsClassifications: GoodsClassification[];
+}
+
+export function MyListingPage({
+  portData,
+  containerTypes,
+  goodsClassifications,
+  className,
+}: MyListingProps) {
   return (
-    <div className="flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed">
+    <div
+      className={cn(
+        "flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed",
+        className
+      )}
+    >
       <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
         <svg
           fill="#000000"
@@ -54,15 +78,15 @@ export function MyListingPage() {
               <DialogTitle>Add Listing</DialogTitle>
               <DialogDescription>Fill in the details to add.</DialogDescription>
             </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="url">Destination Port</Label>
-                <Input id="url" placeholder="Thailand" />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button>Submit Listing</Button>
-            </DialogFooter>
+            <ScrollArea className="h-[600px]">
+              <AddListingForm
+                portData={portData}
+                containerTypes={containerTypes}
+                goodsClassifications={goodsClassifications}
+                className="px-4 flex-grow justify-center"
+              />
+              <ScrollBar />
+            </ScrollArea>
           </DialogContent>
         </Dialog>
       </div>

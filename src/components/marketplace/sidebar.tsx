@@ -89,7 +89,7 @@ export function Sidebar({
           <h2 className="relative px-7 text-lg font-semibold tracking-tight">
             Goods Classification
           </h2>
-          <ScrollArea className="h-[300px] px-1">
+          <ScrollArea className=" px-1">
             <div className="space-y-4 p-2">
               {goodsClassifications?.map((goodsClassification, i) => (
                 <Button
