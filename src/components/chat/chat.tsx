@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from "next/navigation";
 // eslint-disable-next-line
+
 import { io, Socket } from 'socket.io-client';
 import { useSearchParams } from 'next/navigation'
 import axios from 'axios'; // Import Axios
+import './chat.css'; 
 
 
 type Chat = {
@@ -20,16 +22,14 @@ export default function ChatComponent() {
   const query = useSearchParams()
   const senderEmail= query.get('senderEmail');
   const receiverEmail= query.get('receiverEmail');
-  // const listingId = query.get('listingId')
-  console.log(receiverEmail);
-  console.log(senderEmail);
+  const listingId = query.get('listingId')
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
   const [socket, setSocket] = useState<Socket | null>(null); // Initialize as null
   const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
   useEffect(() => {
     // Fetch all chats and list senderEmails in previousChats
-    axios.get(`http://localhost:3000/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}`)
+    axios.get(`http://localhost:3000/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
       .then((response) => {
         const chatData = response.data;
         setCombinedMessages(chatData);
@@ -42,7 +42,7 @@ export default function ChatComponent() {
     if (senderEmail) {
       // Connect to the WebSocket server when userEmail is set
       const newSocket = io('http://localhost:3000', {
-        query: { email: senderEmail },
+        query: { email: senderEmail, listingId: listingId },
       });
 
       newSocket.on('connect_error', (error) => {
@@ -60,7 +60,7 @@ export default function ChatComponent() {
         newSocket.disconnect();
       };
     }
-  }, []);
+  }, [senderEmail]);
 
   useEffect(() => {
     if (!socket) return;
@@ -77,6 +77,7 @@ export default function ChatComponent() {
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         messageContent: newMessage,
+        listingId : listingId
       };
   
       // Send a message to the server in the desired format
@@ -97,26 +98,12 @@ export default function ChatComponent() {
 
   return (
     <div className="chat-container">
-        {/* <div className="chat-email-input">
-        <input
-          type="text"
-          placeholder="Enter your email"
-          value={userEmail}
-          onChange={(e) => setUserEmail(e.target.value)} // Update userEmail state
-        />
-      </div> */}
-      {/* <div className="chat-email-input">
-        <input
-          type="text"
-          placeholder="Enter your reveiver email"
-          value={receiverEmail}
-          onChange={(e) => setReceiverEmail(e.target.value)} // Update userEmail state
-        />
-      </div> */}
       <div className="previous-chats">
       <h2>Combined Messages</h2>
         {combinedMessages.map((message: Chat, index: number) => (
-          <div key={index} className="message">
+          <div
+          key={index}
+          className={`message ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
             <span>{message.senderEmail}:</span> 
             <span>{message.messageContent}</span>
             <span>{new Date(message.timestamp).toLocaleString()}</span>
@@ -125,7 +112,7 @@ export default function ChatComponent() {
       </div>
       <div className="chat-messages">
         {messages.map((message: Chat, index: number) => (
-          <div key={index} className="message">
+        <div key={index} className={`message ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
             <span>{message.senderEmail}: </span>
             <span>{message.messageContent}</span>
             <span>{new Date().toLocaleString()}</span>

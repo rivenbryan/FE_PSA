@@ -10,6 +10,7 @@ type Chat = {
   messageContent: string;
   timestamp: any;
   id: number;
+  listingId: number
 };
 
 export default function Inbox() {
@@ -62,15 +63,18 @@ export default function Inbox() {
                 query: {
                 receiverEmail: chat.senderEmail,
                 senderEmail: userEmail,
+                listingId: chat.listingId
                 },
             }}
             >
+            <strong>{chat.listingId}</strong>
             <strong>{chat.senderEmail}:</strong> {chat.messageContent}
-            </Link>
-            </div>
             <div>
               <small>{new Date(chat.timestamp).toLocaleString()}</small>
             </div>
+            </Link>
+            </div>
+
           </li>
         ))}
       </ul>
