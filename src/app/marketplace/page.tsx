@@ -126,14 +126,16 @@ export default async function MarketPlacePage() {
               />
               <div className="col-span-3 lg:col-span-4 lg:border-l">
                 <div className="h-full px-4 py-6 lg:px-8">
-                  <Tabs defaultValue="music" className="h-full space-y-6">
+                  <Tabs defaultValue="explore" className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <TabsList>
-                        <TabsTrigger value="music" className="relative">
+                        <TabsTrigger value="explore" className="relative">
                           Explore All Listings
                         </TabsTrigger>
-                        <TabsTrigger value="podcasts">My Listings</TabsTrigger>
-                        <TabsTrigger value="live" disabled>
+                        <TabsTrigger value="mylistings">
+                          My Listings
+                        </TabsTrigger>
+                        <TabsTrigger value="future" disabled>
                           Future Expansions
                         </TabsTrigger>
                       </TabsList>
@@ -166,7 +168,7 @@ export default async function MarketPlacePage() {
                       </div>
                     </div>
                     <TabsContent
-                      value="music"
+                      value="explore"
                       className="border-none p-0 outline-none"
                     >
                       <div className="flex items-center justify-between">
@@ -225,7 +227,7 @@ export default async function MarketPlacePage() {
                       </div>
                     </TabsContent>
                     <TabsContent
-                      value="podcasts"
+                      value="mylistings"
                       className="h-full flex-col border-none p-0 data-[state=active]:flex"
                     >
                       <div className="flex items-center justify-between">
