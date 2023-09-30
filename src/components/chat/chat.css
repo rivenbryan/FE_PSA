@@ -1,0 +1,17 @@
+/* Styling for sender's messages (blue, left-aligned) */
+.sender-message {
+    background-color: #e6f7ff; /* Blue background color */
+    text-align: left;
+  }
+  
+  /* Styling for receiver's messages (green, right-aligned) */
+  .receiver-message {
+    background-color: #e6ffe6; /* Green background color */
+    text-align: right;
+  }
+  
+  /* Style for message content */
+  .message-content {
+    padding: 5px; /* Add some padding for better readability */
+  }
+  
