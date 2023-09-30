@@ -7,22 +7,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import {BsRobot} from "react-icons/bs";
 type Props = {
   cardTitle: string;
   cardContent: React.ReactNode;
-
+  isIcon?: boolean;
+  handleClick?: () => void;
 };
 
-export default function DashboardCard({cardTitle, cardContent}: Props) {
+export default function DashboardCard({ cardTitle, cardContent, isIcon, handleClick }: Props) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{cardTitle}</CardTitle>
+        <CardTitle>
+          <div className="flex gap-3">{cardTitle} 
+          {isIcon && <BsRobot onClick={handleClick}/>}
+          </div>
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-       {cardContent}
-      </CardContent>
+      <CardContent>{cardContent}</CardContent>
     </Card>
   );
 }
