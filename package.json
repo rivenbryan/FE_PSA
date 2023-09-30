@@ -22,6 +22,7 @@
     "react-gauge-chart": "^0.4.1",
     "react-gauge-component": "^1.1.22",
     "recharts": "^2.8.0",
+    "socket.io-client": "^4.7.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.7"
   },

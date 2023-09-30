@@ -12,7 +12,7 @@ const data = [
     // ...
   ]
 export default function CardContentForTransactionHistory({}: Props) {
-  return (
-    <DataTable columns={columns} data={data} />
-  )
+  // return (
+  //   <DataTable columns={columns} data={data} />
+  // )
 }
