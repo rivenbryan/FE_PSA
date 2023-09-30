@@ -20,6 +20,7 @@ export default function ChatComponent() {
   const query = useSearchParams()
   const senderEmail= query.get('senderEmail');
   const receiverEmail= query.get('receiverEmail');
+  // const listingId = query.get('listingId')
   console.log(receiverEmail);
   console.log(senderEmail);
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
