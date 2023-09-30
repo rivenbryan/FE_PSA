@@ -16,7 +16,6 @@ type Chat = {
 
 export default function Inbox() {
   const API_URL='http://localhost:3000';
-  console.log(API_URL);
   const [chats, setChats] = useState<Chat[]>([]);
   const [userEmail, setUserEmail] = useState<string>('');
   // Function to fetch chat data
@@ -71,7 +70,7 @@ export default function Inbox() {
             }}
             >
             <strong>{chat.listingId}</strong>
-            <strong>{chat.senderEmail}:</strong> {chat.messageContent}
+            <strong>{chat.senderEmail}:</strong> 
             <div>
               <small>{new Date(chat.timestamp).toLocaleString()}</small>
             </div>

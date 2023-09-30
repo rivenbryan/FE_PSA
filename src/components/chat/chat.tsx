@@ -78,7 +78,8 @@ export default function ChatComponent() {
         senderEmail: senderEmail,
         receiverEmail: receiverEmail,
         messageContent: newMessage,
-        listingId : listingId
+        listingId : listingId,
+        timestamp : new Date().toLocaleString()
       };
   
       // Send a message to the server in the desired format
@@ -116,7 +117,7 @@ export default function ChatComponent() {
         <div key={index} className={`message ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
             <span>{message.senderEmail}: </span>
             <span>{message.messageContent}</span>
-            <span>{new Date().toLocaleString()}</span>
+            <span>{new Date(message.timestamp).toLocaleString()}</span>
           </div>
         ))}
       </div>
