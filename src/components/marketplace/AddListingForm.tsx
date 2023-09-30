@@ -28,7 +28,7 @@ import {
   GoodsClassification,
   Port,
 } from "@/app/marketplace/page";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
   Command,
   CommandEmpty,
@@ -38,7 +38,6 @@ import {
 } from "@/registry/new-york/ui/command";
 import { format } from "date-fns";
 import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
-import { Calendar } from "@/registry/new-york/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -46,7 +45,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/registry/new-york/ui/select";
-import Link from "next/link";
 
 const addListingFormSchema = z.object({
   accountName: z
@@ -73,10 +71,6 @@ const addListingFormSchema = z.object({
 type AccountFormValues = z.infer<typeof addListingFormSchema>;
 
 const defaultValues: Partial<AccountFormValues> = {
-  sold: false,
-  // "id": 7,
-  // "created_at": "2023-09-30T07:50:17.316263+00:00",
-  // "leasingOwner": "xiezijian99@gmail.com",
   // "account": "Wan Hai Lines",
   // "cargoSize": "0.6",
   // "loadPort": "PSA",
@@ -86,13 +80,13 @@ const defaultValues: Partial<AccountFormValues> = {
   // "containerType": "Reefer",
   // "typeDangGoods": "Class1 - Explosives",
   // "price": 200,
-  // "sold": false
 };
 
 interface AddListingFormProps extends React.HTMLAttributes<HTMLDivElement> {
   portData: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
+  currUser?: any;
 }
 
 export function AddListingForm({
@@ -107,7 +101,7 @@ export function AddListingForm({
   });
 
   function onSubmit(data: AccountFormValues) {
-    console.log(data);
+    console.log("test");
     toast({
       title: "You submitted the following values:",
       description: (
@@ -116,6 +110,10 @@ export function AddListingForm({
         </pre>
       ),
     });
+  }
+
+  function test(data: AccountFormValues) {
+    console.log("here");
   }
   return (
     <div className={className}>
