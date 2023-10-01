@@ -31,7 +31,7 @@ interface ChatComponentProp extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function ChatComponent( {senderEmail, receiverEmail, listingId, pollState}:ChatComponentProp) {
-  const API_URL='http://localhost:3000';
+  const API_URL='http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000';
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
   const [socket, setSocket] = useState<Socket | null>(null); // Initialize as null
