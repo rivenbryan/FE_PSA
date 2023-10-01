@@ -10,6 +10,11 @@ import './chat.css';
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 
+interface Props {
+  senderEmail: string;
+  receiverEmail: string;
+  listingId: string;
+}
 type Chat = {
   senderEmail: string;
   receiverEmail: string;
@@ -18,6 +23,7 @@ type Chat = {
   id: number;
 };
 
+<<<<<<< HEAD
 interface ChatComponentProp extends React.HTMLAttributes<HTMLDivElement> {
   senderEmail:string;
   receiverEmail:string;
@@ -25,6 +31,10 @@ interface ChatComponentProp extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function ChatComponent( {senderEmail, receiverEmail, listingId}:ChatComponentProp) {
+=======
+export default function ChatComponent({senderEmail, receiverEmail, listingId}: Props) {
+  console.log("Chat Component");
+>>>>>>> d3e9b8fcdd899185600ca5c5f7e91471a9e65b91
   const API_URL='http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000';
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
@@ -123,7 +133,10 @@ export default function ChatComponent( {senderEmail, receiverEmail, listingId}:C
 
   return (
     <div className="chat-container">
+<<<<<<< HEAD
        <div className='header'>{receiverEmail}</div>
+=======
+>>>>>>> d3e9b8fcdd899185600ca5c5f7e91471a9e65b91
       <ScrollArea className="message-container" ref={scrollRef}>
       <div className="previous-chats" ref={chatHistoryRef}>
         {combinedMessages.map((message: Chat, index: number) => (

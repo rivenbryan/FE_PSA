@@ -148,7 +148,7 @@ export default function Home() {
           cardContent={<CardContentForTotalRevenue revenue={revenueData?.revenue} percentage={revenueData?.percentage} />}
         />
          <DashboardCard
-          cardTitle="Environmental Savings"
+          cardTitle="Environmental Savings" 
           cardContent={<CardContentForEnv/>}
         />
       </div>
