@@ -4,6 +4,9 @@ import axios from "axios";
 import { useQuery } from "react-query";
 import ChatInboxCard from "./ChatInboxCard";
 import ChatComponent from "./chat";
+import { error } from "console";
+import { supabase } from "@/lib/db";
+import { User } from "@supabase/supabase-js";
 require("dotenv").config();
 
 type Chat = {
@@ -16,21 +19,31 @@ type Chat = {
 };
 
 export default function Inbox() {
+  const [currentUser, setCurrentUser] = useState([]);
+  useEffect(() => {
+    console.log("fetching user");
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      setCurrentUser(user);
+    }
+    fetchUser().catch(console.error)
+  },[])
   
   const [chatID, setChatID] = useState<{listingID: any, receiverID: string}>({listingID: "", receiverID: ""});
   const [pollState, setPollState] = useState(false);
+  const url = "http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/chat/list?Email="+currentUser.email;
+  console.log(url);
   const { data: chatData } = useQuery({
-    queryKey: ["chatUsers"],
+    queryKey: ["chatUsers", currentUser.email],
     refetchOnWindowFocus: false,
     queryFn: async () => {
       const { data } = await axios.get(
-        "http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/chat/list?Email=test@gmail.com"
+        url
       );
       return data;
     },
   });
 
- 
   return (
     <div className="flex gap-10">
       <div>
@@ -43,7 +56,7 @@ export default function Inbox() {
         </div>
       </div>
       <div className="flex-grow">
-            {chatID.listingID !== "" && <ChatComponent pollState={pollState} senderEmail={"test@gmail.com"} receiverEmail={chatID.receiverID} listingId={chatID.listingID} />}
+            {chatID.listingID !== "" && <ChatComponent pollState={pollState} senderEmail={currentUser.email} receiverEmail={chatID.receiverID} listingId={chatID.listingID} />}
       </div>
     </div>
   );
