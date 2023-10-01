@@ -23,21 +23,25 @@ import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
 interface destPortFilterProps extends React.HTMLAttributes<HTMLDivElement> {
   portData: Port[];
   setDestPortFilter: any;
+  destPortFilter: any;
 }
 
 export function DestPortFilter({
+  destPortFilter,
   className,
   portData,
   setDestPortFilter,
 }: destPortFilterProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(destPortFilter);
+
+  React.useEffect(() => {
+    setValue(destPortFilter);
+  }, [destPortFilter]);
 
   const handlePortSelect = (portName: string) => {
     setValue(portName);
     setOpen(false);
-
-    // Update the parent component's state here if needed
     setDestPortFilter(portName);
   };
   return (

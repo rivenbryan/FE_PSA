@@ -72,7 +72,6 @@ export interface AllGoodsClassificationInterface
 export default function MarketPlacePage() {
   console.log("rendering");
   const [deleteFlag, setDeleteFlag] = useState(false);
-  const [resetFilters, setResetFilters] = useState(false);
   const [diaOpen, setDiaOpen] = useState(false);
   const [destPortFilter, setDestPortFilter] = useState("");
   const [containerTypeFilter, setContainerTypeFilter] = useState("");
@@ -86,11 +85,6 @@ export default function MarketPlacePage() {
     useState<AllContainerTypesInterface>([]);
   const [goodsClassificationData, setGoodsClassificationData] =
     useState<AllGoodsClassificationInterface>([]);
-
-  useEffect(() => {
-    setDestPortFilter("");
-    setContainerTypeFilter("");
-  }, [resetFilters]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -212,10 +206,10 @@ export default function MarketPlacePage() {
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               <Sidebar
-                setResetFilters={setResetFilters}
                 goodsClassifications={goodsClassificationData}
                 destPorts={portData}
                 containerTypes={containerTypesData}
+                destPortFilter={destPortFilter}
                 setDestPortFilter={updateDestPortFilter}
                 containerTypeFilter={containerTypeFilter}
                 setContainerTypeFilter={updateContainerTypeFilter}

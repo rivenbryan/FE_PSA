@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/registry/new-york/ui/button";
 import { ScrollArea } from "@/registry/new-york/ui/scroll-area";
-import { useRouter } from "next/router";
 import {
   ContainerType,
   GoodsClassification,
@@ -14,11 +13,11 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   destPorts: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
+  destPortFilter: any;
   setDestPortFilter: any;
   containerTypeFilter: string;
   setContainerTypeFilter: any;
   setGoodsClassificationFilter: any;
-  setResetFilters: any;
 }
 
 export function Sidebar({
@@ -26,11 +25,11 @@ export function Sidebar({
   goodsClassifications,
   destPorts,
   containerTypes,
+  destPortFilter,
   setDestPortFilter,
   containerTypeFilter,
   setContainerTypeFilter,
   setGoodsClassificationFilter,
-  setResetFilters,
 }: SidebarProps) {
   //   const router = useRouter();
 
@@ -49,7 +48,8 @@ export function Sidebar({
           <Button
             className="w-[100%]"
             onClick={(e) => {
-              setResetFilters(true);
+              setDestPortFilter("");
+              setContainerTypeFilter("");
             }}
           >
             <CrossCircledIcon className="mr-2" />
@@ -62,6 +62,7 @@ export function Sidebar({
           </h2>
           <div className="space-y-1">
             <DestPortFilter
+              destPortFilter={destPortFilter}
               className=" pl-6 w-full justify-start"
               portData={destPorts}
               setDestPortFilter={setDestPortFilter}
