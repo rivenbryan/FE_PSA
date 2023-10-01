@@ -18,21 +18,11 @@ import {
 } from "chart.js";
 import { useState } from "react";
 import AiModal from "@/components/AiModal";
+import { redirect } from "next/navigation";
+import CardContentForEnv from "./cardContent/CardContentForEnv";
 
 
-export const lineData = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
-  datasets: [
-    {
-      label: "Average Selling Price",
-      data:  [1200, 1100, 1300, 1250, 1150, 1280, 1350],
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgba(75, 192, 192, 0.2)",
-      fill: true,
-      tension: 0.4,
-    },
-  ],
-};
+
 
 ChartJS.register(
   CategoryScale,
@@ -44,28 +34,110 @@ ChartJS.register(
   Legend
 );
 export default function Home() {
+
+  
   const [open, setOpen] = useState(false);
-  console.log(open)
+
   const handleClick = () => {
     setOpen(!open);
   }
-  // const {data , isLoading, isError} = useQuery({
-  //   queryKey: ['linedata'],
-  //   refetchOnWindowFocus: false,
-  //   // queryFn: async () => {
-  //   //   const {data} = await axios.get('/api/todos')
-  //   //   return data.res as ToDo[];
-  //   // }
-  // })
 
-  // if (isLoading){
-  //   return <div>Loading ...</div>
-  // }
+  const {data: revenueData} = useQuery({
+    queryKey: ['revenue'],
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const {data} = await axios.get('http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/get/totalRevenue')
+      return data;
+    }
+  })
 
-  // if (isError){
-  //   return <div>Error ... try again  </div>
-  // }
+  const {data: utilizationData} = useQuery({
+    queryKey: ['utilizationData'],
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const {data} = await axios.get('http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/get/utilization')
+      return data;
+    }
+  })
+
+  const {data: priceData} = useQuery({
+    queryKey: ['priceData'],
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const {data} = await axios.get('http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/get/dataPriceTrend')
+      return data;
+    }
+  })
+
+
+  const {data: transactionData} = useQuery({
+    queryKey: ['transactionData'],
+    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const {data} = await axios.get('http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/get/transactionHistory')
+      return data;
+    }
+  })
+
+  console.log(transactionData);
   
+  const xAxis = [
+    "2023 2Q",
+    "2023 1Q",
+    "2022 4Q",
+    "2022 3Q",
+    "2022 2Q",
+    "2022 1Q",
+    "2021 4Q",
+    "2021 3Q",
+    "2021 2Q",
+    "2021 1Q",
+    "2020 4Q",
+    "2020 3Q",
+    "2020 2Q",
+    "2020 1Q",
+    "2019 4Q",
+    "2019 3Q",
+    "2019 2Q",
+    "2019 1Q",
+    "2018 4Q",
+    "2018 3Q",
+    "2018 2Q",
+    "2018 1Q",
+    "2017 4Q",
+    "2017 3Q",
+    "2017 2Q",
+    "2017 1Q",
+    "2016 4Q",
+    "2016 3Q",
+    "2016 2Q",
+    "2016 1Q",
+    "2015 4Q",
+    "2015 3Q",
+    "2015 2Q",
+    "2015 1Q"
+  ];
+  let yAxis = []
+  if (priceData){
+    yAxis = priceData[0].trend 
+    console.log(yAxis)
+    
+  }
+
+  const lineData = {
+    labels: xAxis,
+    datasets: [
+      {
+        label: "Average Selling Price",
+        data: yAxis,
+        borderColor: "rgb(75, 192, 192)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        fill: true,
+        tension: 0.4,
+      },
+    ],
+  };
+
   return (
     <>
     {open && <AiModal data={lineData} setOpen={setOpen}/>}
@@ -73,14 +145,18 @@ export default function Home() {
       <div className="flex gap-10">
         <DashboardCard
           cardTitle="Total Revenue"
-          cardContent={<CardContentForTotalRevenue />}
+          cardContent={<CardContentForTotalRevenue revenue={revenueData?.revenue} percentage={revenueData?.percentage} />}
+        />
+         <DashboardCard
+          cardTitle="Environmental Savings"
+          cardContent={<CardContentForEnv/>}
         />
       </div>
       <div className="flex gap-10"></div>
       <div className="flex gap-10">
         <DashboardCard
           cardTitle="Utilization Rate"
-          cardContent={<CardContentForUtilizationRate />}
+          cardContent={<CardContentForUtilizationRate percentageUsed={utilizationData?.percentage} />}
         />
         <div className="flex-grow">
           <DashboardCard
@@ -94,7 +170,7 @@ export default function Home() {
       <div>
         <DashboardCard
           cardTitle="Transaction History"
-          cardContent={<CardContentForTransactionHistory />}
+          cardContent={<CardContentForTransactionHistory data={transactionData } />}
         />
       </div>
     </div>

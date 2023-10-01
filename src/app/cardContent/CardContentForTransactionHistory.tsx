@@ -1,17 +1,27 @@
 import { DataTable } from '@/components/DataTable'
 import React from 'react'
 import { Payment, columns } from '@/components/table/columns'
-type Props = {}
+type Props = {
+  data:any
+}
 const data = [
+
     {
-      id: "728ed52f",
-      amount: 100,
-      status: "pending",
-      email: "m@example.com",
+        account: "Tencent International ",
+        price: 700,
+        status: "pending"
     },
-    // ...
+
   ]
-export default function CardContentForTransactionHistory({}: Props) {
+export default function CardContentForTransactionHistory({data}: Props) {
+
+  if (data === undefined) {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
   return (
     <DataTable columns={columns} data={data} />
   )
