@@ -70,9 +70,12 @@ export interface AllGoodsClassificationInterface
   extends Array<GoodsClassificationInterface> {}
 
 export default function MarketPlacePage() {
+  console.log("rendering");
+  const [deleteFlag, setDeleteFlag] = useState(false);
+  const [resetFilters, setResetFilters] = useState(false);
   const [diaOpen, setDiaOpen] = useState(false);
   const [destPortFilter, setDestPortFilter] = useState("");
-  const [containerTypeFilter, setContainerTypeFilter] = useState([]);
+  const [containerTypeFilter, setContainerTypeFilter] = useState("");
   const [goodsClassificationFilter, setGoodsClassificationFilter] = useState(
     []
   );
@@ -83,6 +86,11 @@ export default function MarketPlacePage() {
     useState<AllContainerTypesInterface>([]);
   const [goodsClassificationData, setGoodsClassificationData] =
     useState<AllGoodsClassificationInterface>([]);
+
+  useEffect(() => {
+    setDestPortFilter("");
+    setContainerTypeFilter("");
+  }, [resetFilters]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -112,7 +120,7 @@ export default function MarketPlacePage() {
       setGoodsClassificationData(goodsClassificationRes.data);
     };
     fetchData().catch(console.error);
-  });
+  }, [diaOpen, deleteFlag]);
 
   // let listingData: AllListings = [];
   // let portData: AllPorts = [];
@@ -145,9 +153,20 @@ export default function MarketPlacePage() {
     setDestPortFilter(selectedPorts);
   };
 
+  const updateContainerTypeFilter = (selectedContainerTypeFilter: string) => {
+    setContainerTypeFilter(selectedContainerTypeFilter);
+  };
+
   const listingDataDisplaying = listingData.filter((listing) => {
-    if (destPortFilter != "") {
-      return listing.destPort === destPortFilter;
+    if (destPortFilter !== "" && containerTypeFilter !== "") {
+      return (
+        listing.destPort.includes(destPortFilter) &&
+        listing.containerType.includes(containerTypeFilter)
+      );
+    } else if (destPortFilter !== "") {
+      return listing.destPort.includes(destPortFilter);
+    } else if (containerTypeFilter !== "") {
+      return listing.containerType.includes(containerTypeFilter);
     } else {
       return true;
     }
@@ -193,11 +212,13 @@ export default function MarketPlacePage() {
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               <Sidebar
+                setResetFilters={setResetFilters}
                 goodsClassifications={goodsClassificationData}
                 destPorts={portData}
                 containerTypes={containerTypesData}
                 setDestPortFilter={updateDestPortFilter}
-                setContainerTypeFilter={setContainerTypeFilter}
+                containerTypeFilter={containerTypeFilter}
+                setContainerTypeFilter={updateContainerTypeFilter}
                 setGoodsClassificationFilter={setGoodsClassificationFilter}
                 className="hidden lg:block"
               />
@@ -321,6 +342,7 @@ export default function MarketPlacePage() {
                       </div>
                       <Separator className="my-4" />
                       <MyListingPage
+                        deleteFlag={setDeleteFlag}
                         dialogState={setDiaOpen}
                         currUser={currUser}
                         myListings={myListingsData}
