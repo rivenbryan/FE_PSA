@@ -4,6 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useQuery } from "react-query";
 import ChatInboxCard from "./ChatInboxCard";
+import ChatComponent from "./chat";
 require("dotenv").config();
 
 type Chat = {
@@ -16,6 +17,9 @@ type Chat = {
 };
 
 export default function Inbox() {
+  
+  const [chatID, setChatID] = useState<{listingID: string, receiverID: string}>({listingID: "", receiverID: ""});
+
   const { data: chatData } = useQuery({
     queryKey: ["chatUsers"],
     refetchOnWindowFocus: false,
@@ -27,56 +31,21 @@ export default function Inbox() {
     },
   });
 
-  console.log(chatData);
+ 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-10">
       <div>
-        <h1>Inbox</h1>
+        <h1 className="font-bold text-lg">Inbox</h1>
         <div className="flex flex-col gap-10 max-h-[800px] overflow-y-auto">
           {chatData?.map((chat) => (
-            <ChatInboxCard chat={chat} />
+            <ChatInboxCard chat={chat} setChatID={setChatID}/>
           ))}
-          <ChatInboxCard />
-          <ChatInboxCard />
         </div>
       </div>
       <div className="flex-grow">
-        <h1>Chat</h1>
+            {chatID.listingID !== "" && <ChatComponent senderEmail={"test@gmail.com"} receiverEmail={chatID.receiverID} listingId={chatID.listingID} />}
+       
       </div>
     </div>
-    // <div className="user-list">
-    //   <h2>Inbox</h2>
-    //   <input
-    //     type="text"
-    //     placeholder="Enter your email"
-    //     value={userEmail}
-    //     onChange={(e) => setUserEmail(e.target.value)}
-    //   />
-    //   <ul>
-    //     {chats.map((chat) => (
-    //       <li key={chat.id}>
-    //         <div>
-    //         <Link
-    //         href={{
-    //             pathname: '/chat',
-    //             query: {
-    //             receiverEmail: chat.senderEmail,
-    //             senderEmail: userEmail,
-    //             listingId: chat.listingId
-    //             },
-    //         }}
-    //         >
-    //         <strong>{chat.listingId}</strong>
-    //         <strong>{chat.senderEmail}:</strong>
-    //         <div>
-    //           <small>{new Date(chat.timestamp).toLocaleString()}</small>
-    //         </div>
-    //         </Link>
-    //         </div>
-
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
   );
 }
