@@ -85,15 +85,20 @@
   height: 400px; /* Set the height to 72 pixels */
   padding: 20px;
   padding-bottom: 0;
-  overscroll-behavior-y: contain;
-  scroll-snap-type: y proximity;
-
 }
 
-.message-container > div > div:last-child {
-  scroll-snap-align: end;
-}
 
 .chat-continer{
   width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+.header {
+  display: flex;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 10px;
 }

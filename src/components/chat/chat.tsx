@@ -32,8 +32,8 @@ export default function ChatComponent() {
   const chatHistoryRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (chatHistoryRef.current) {
-      const element = chatHistoryRef.current;
+    if (scrollRef.current) {
+      const element = scrollRef.current;
       const lastChild = element.lastElementChild;
 
       // Check if lastChild exists before setting the scroll position
@@ -87,7 +87,6 @@ export default function ChatComponent() {
     });
   }, [socket]);
   const handleKeyDown = (e: any) => {
-    console.log('enteresd')
     if (e.code === "Enter") {
      
       handleSendMessage();
@@ -123,7 +122,7 @@ export default function ChatComponent() {
 
   return (
     <div className="chat-container">
-       <h2>{receiverEmail}</h2>
+       <div className='header'>{receiverEmail}</div>
       <ScrollArea className="message-container" ref={scrollRef}>
       <div className="previous-chats" ref={chatHistoryRef}>
         {combinedMessages.map((message: Chat, index: number) => (
