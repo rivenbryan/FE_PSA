@@ -50,29 +50,26 @@ export const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
 
-// Example average selling prices for each month (can be replaced with real data)
-const averageSellingPrices = [1200, 1100, 1300, 1250, 1150, 1280, 1350];
 
-export const data = {
-  labels,
-  datasets: [
-    {
-      label: "Average Selling Price",
-      data: averageSellingPrices,
-      borderColor: "rgb(75, 192, 192)",
-      backgroundColor: "rgba(75, 192, 192, 0.2)",
-      fill: true,
-      tension: 0.4,
-    },
-  ],
-};
+interface Props {
+  data: LineData;
+}
+interface LineData {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+    fill: boolean;
+    tension: number;
+  }[];
+}
 
-export function CardContentForDatePriceTrend() {
+export function CardContentForDatePriceTrend({data}: Props) {
   return (
-    <div className="">
-      <Line  data={data} />
-    </div>
+      <>
+      </>
   );
 }
