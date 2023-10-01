@@ -26,10 +26,11 @@ type Chat = {
 interface ChatComponentProp extends React.HTMLAttributes<HTMLDivElement> {
   senderEmail:string;
   receiverEmail:string;
-  listingId:number
+  listingId:number;
+  pollState?: boolean;
 }
 
-export default function ChatComponent( {senderEmail, receiverEmail, listingId}:ChatComponentProp) {
+export default function ChatComponent( {senderEmail, receiverEmail, listingId, pollState}:ChatComponentProp) {
   const API_URL='http://localhost:3000';
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
@@ -37,29 +38,22 @@ export default function ChatComponent( {senderEmail, receiverEmail, listingId}:C
   const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
   const chatHistoryRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    if (scrollRef.current) {
-      const element = scrollRef.current;
-      const lastChild = element.lastElementChild;
 
-      // Check if lastChild exists before setting the scroll position
-      if (lastChild) {
-        // Use the scrollIntoView method to scroll to the lastChild
-        lastChild.scrollIntoView();
-      }
-    }
-  }, [combinedMessages,newMessage])
   useEffect(() => {
     // Fetch all chats and list senderEmails in previousChats
+    
+    console.log('test')
     axios.get(`${API_URL}/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
       .then((response) => {
         const chatData = response.data;
         setCombinedMessages(chatData);
+        console.log(chatData);
+        console.log('test')
       })
       .catch((error) => {
         console.error('Error fetching chat data:', error);
       });
-  }, []);
+  }, [pollState]);
   useEffect(() => {
     if (senderEmail) {
       // Connect to the WebSocket server when userEmail is set
@@ -82,7 +76,7 @@ export default function ChatComponent( {senderEmail, receiverEmail, listingId}:C
         newSocket.disconnect();
       };
     }
-  }, [senderEmail]);
+  }, [pollState]);
 
   useEffect(() => {
     if (!socket) return;
