@@ -20,7 +20,8 @@ type Chat = {
 
 export default function ChatComponent() {
   const router=useRouter();
-  const API_URL='http://localhost:3000';
+  console.log("test")
+  const API_URL='http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000';
   const query = useSearchParams()
   const senderEmail= query.get('senderEmail');
   const receiverEmail= query.get('receiverEmail');
