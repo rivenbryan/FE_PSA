@@ -1,0 +1,99 @@
+
+.name {
+  font-weight: bold; /* Make the sender's name bold */
+  font-size: 13px; /* Set a smaller font size for the sender's name */
+}
+/* Style for message bubble container */
+.message-bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* For sender messages */
+  justify-content: flex-start; /* For sender messages */
+  
+  background-color: transparent; /* Set background color of the container to transparent */
+  margin-bottom: 10px; /* Add margin between messages */
+}
+
+/* Style for message content */
+.message-content {
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  background-color: #e6f7ff; /* Blue background color for sender */
+  /* Add other styling properties as needed */
+}
+
+.timestamp {
+  font-size: 12px;
+  color: gray; /* Set the color for the timestamp text */
+  align-self: flex-end; /* Align timestamp to the bottom right */
+}
+
+/* Background color for sender's message content */
+.sender-message .message-content {
+  align-self: flex-end;
+  margin-bottom: 10px;
+  background-color: #e6f7ff; /* Blue background color */
+}
+
+/* Background color for receiver's message content */
+.receiver-message .message-content {
+   /* For receiver messages */
+  margin-bottom: 10px;
+  background-color: #e6ffe6; /* Green background color */
+}
+/* Style for chat input container */
+.chat-input {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5; /* Background color for the chat input container */
+  padding: 10px;
+  border-top: 1px solid #ddd; /* Add a top border */
+}
+
+/* Style for the input field */
+.chat-input input[type="text"] {
+  flex: 1; /* Allow the input to grow and take up available space */
+  padding: 10px;
+  border: none;
+  border-radius: 25px; /* Rounded corners for the input field */
+  outline: none; /* Remove the input field's outline */
+  background-color: #fff; /* Background color for the input field */
+  margin-right: 10px; /* Add some spacing to the right of the input field */
+}
+
+/* Style for the send button */
+.chat-input button {
+  background-color: #0052af; /* Background color for the send button */
+  color: #fff; /* Text color for the send button */
+  border: none;
+  border-radius: 50%; /* Make the button circular */
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Hover effect for the send button */
+.chat-input button:hover {
+  background-color: #00249b; /* Darker background color on hover */
+}
+.message-container {
+  height: 400px; /* Set the height to 72 pixels */
+  padding: 20px;
+  padding-bottom: 0;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y proximity;
+
+}
+
+.message-container > div > div:last-child {
+  scroll-snap-align: end;
+}
+
+.chat-continer{
+  width: 250px;
+}

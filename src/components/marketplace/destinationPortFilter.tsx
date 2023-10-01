@@ -22,11 +22,28 @@ import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
 
 interface destPortFilterProps extends React.HTMLAttributes<HTMLDivElement> {
   portData: Port[];
+  setDestPortFilter: any;
+  destPortFilter: any;
 }
 
-export function DestPortFilter({ className, portData }: destPortFilterProps) {
+export function DestPortFilter({
+  destPortFilter,
+  className,
+  portData,
+  setDestPortFilter,
+}: destPortFilterProps) {
   const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = React.useState(destPortFilter);
+
+  React.useEffect(() => {
+    setValue(destPortFilter);
+  }, [destPortFilter]);
+
+  const handlePortSelect = (portName: string) => {
+    setValue(portName);
+    setOpen(false);
+    setDestPortFilter(portName);
+  };
   return (
     <div className={cn(className)}>
       <Popover open={open} onOpenChange={setOpen}>
@@ -47,16 +64,13 @@ export function DestPortFilter({ className, portData }: destPortFilterProps) {
         <PopoverContent className="w-[200px] p-0">
           <Command>
             <CommandInput placeholder="Search dest. port..." />
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No dest. port found.</CommandEmpty>
             <ScrollArea className="h-[300px]">
               <CommandGroup>
                 {portData.map((port) => (
                   <CommandItem
                     key={port.name}
-                    onSelect={(currentValue) => {
-                      setValue(currentValue === value ? "" : port.name);
-                      setOpen(false);
-                    }}
+                    onSelect={() => handlePortSelect(port.name)}
                   >
                     <Check
                       className={cn(
