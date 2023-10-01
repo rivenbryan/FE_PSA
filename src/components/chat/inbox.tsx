@@ -16,10 +16,8 @@ type Chat = {
 };
 
 export default function Inbox() {
-  const [chatID, setChatID] = useState<{
-    listingID: string;
-    receiverID: string;
-  }>({ listingID: "", receiverID: "" });
+  
+  const [chatID, setChatID] = useState<{listingID: any, receiverID: string}>({listingID: "", receiverID: ""});
 
   const { data: chatData } = useQuery({
     queryKey: ["chatUsers"],
@@ -32,24 +30,21 @@ export default function Inbox() {
     },
   });
 
+ 
   return (
     <div className="flex gap-10">
       <div>
         <h1 className="font-bold text-lg">Inbox</h1>
         <div className="flex flex-col gap-10 max-h-[800px] overflow-y-auto">
+          
           {chatData?.map((chat) => (
-            <ChatInboxCard key={chat} chat={chat} setChatID={setChatID} />
+            <ChatInboxCard key={chat} chat={chat} setChatID={setChatID}/>
           ))}
         </div>
       </div>
       <div className="flex-grow">
-        {chatID.listingID !== "" && (
-          <ChatComponent
-            senderEmail={"test@gmail.com"}
-            receiverEmail={chatID.receiverID}
-            listingId={chatID.listingID}
-          />
-        )}
+            {chatID.listingID !== "" && <ChatComponent senderEmail={"test@gmail.com"} receiverEmail={chatID.receiverID} listingId={chatID.listingID} />}
+       
       </div>
     </div>
   );
