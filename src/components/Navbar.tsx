@@ -48,7 +48,7 @@ const Navbar = () => {
             <a href="/inbox" className="text-black">
               Inbox
             </a>
-            {!userLoggedIn ? <></> : <a onClick={handleSignOut} href="/" className="text-black">
+            {userLoggedIn && <a onClick={handleSignOut} href="/" className="text-black">
               Sign Out
             </a>}
           </div>

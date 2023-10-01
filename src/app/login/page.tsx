@@ -28,7 +28,7 @@ export default function Home() {
   const [password, setPassword] = useState("");
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-
+    
     let { error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
