@@ -29,7 +29,20 @@ export default function ChatComponent() {
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
   const [socket, setSocket] = useState<Socket | null>(null); // Initialize as null
   const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
-  const scrollableContainerRef = useRef<HTMLDivElement | null>(null);
+  const chatHistoryRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (chatHistoryRef.current) {
+      const element = chatHistoryRef.current;
+      const lastChild = element.lastElementChild;
+
+      // Check if lastChild exists before setting the scroll position
+      if (lastChild) {
+        // Use the scrollIntoView method to scroll to the lastChild
+        lastChild.scrollIntoView();
+      }
+    }
+  }, [combinedMessages,newMessage])
   useEffect(() => {
     // Fetch all chats and list senderEmails in previousChats
     axios.get(`${API_URL}/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
@@ -108,23 +121,11 @@ export default function ChatComponent() {
   }
 
 
-  const scrollToBottom = () => {
-    if (scrollableContainerRef.current) {
-      scrollableContainerRef.current.scrollTop =
-        scrollableContainerRef.current.scrollHeight;
-    }
-  };
-
-  useEffect(() => {
-    console.log('test')
-    scrollToBottom();
-  }, [combinedMessages, newMessage]);
-
   return (
     <div className="chat-container">
        <h2>{receiverEmail}</h2>
-      <ScrollArea ref={scrollableContainerRef} className="message-container">
-      <div className="previous-chats">
+      <ScrollArea className="message-container" ref={scrollRef}>
+      <div className="previous-chats" ref={chatHistoryRef}>
         {combinedMessages.map((message: Chat, index: number) => (
           <div
           key={index}
@@ -138,7 +139,7 @@ export default function ChatComponent() {
           </div>
         ))}
       </div>
-      <div className="chat-messages">
+      <div className="chat-messages" ref={chatHistoryRef}>
         {messages.map((message: Chat, index: number) => (
         <div key={index} className={`message-bubble ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
           <div className='message-content'>
@@ -160,7 +161,7 @@ export default function ChatComponent() {
           onKeyDown={handleKeyDown}
         />
         <button onClick={handleSendMessage} >
-          <i className="fa fa-paper-plane"></i> <RocketIcon/>
+          <i className="fa fa-paper-plane"></i><RocketIcon/>
         </button>
       </div>
     </div>
