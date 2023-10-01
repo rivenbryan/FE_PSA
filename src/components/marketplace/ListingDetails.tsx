@@ -37,29 +37,31 @@ export default function ListingDetailComponent({
         />
       </div>
       <div className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+        <div className="relative hidden h-full flex-col p-2 bg-muted text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
-          <div className="absolute inset-1 rounded-b-lg max-h-[50%] overflow-hidden object-center">
+          <div className="relative  rounded-b-lg h-1/2 overflow-hidden">
             <Image
               src={`/listingImages/${listing.id}.jpg`}
               alt={`${listing.account} - ${listing.destPort}`}
-              width={500}
+              width={600}
               height={300}
-              className="h-auto w-auto object-cover transition-all hover:scale-105naspect-[3/4]"
+              className="object-center transition-all hover:scale-105 aspect-auto"
             />
           </div>
-          <div className="relative mt-auto z-10 flex items-center text-lg font-medium">
-            Listing Details
-          </div>
-          <div className="relative z-20 mt-auto">
-            <blockquote className="space-y-2">
-              <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before.&rdquo;
-              </p>
-              <footer className="text-sm">Sofia Davis</footer>
-            </blockquote>
+          <div className="p-10">
+            <div className="relative mt-auto z-20 flex items-center text-lg font-medium">
+              Listing Details
+            </div>
+            <div className="relative z-20 mt-auto">
+              <blockquote className="space-y-2">
+                <p className="text-lg">
+                  &ldquo;This library has saved me countless hours of work and
+                  helped me deliver stunning designs to my clients faster than
+                  ever before.&rdquo;
+                </p>
+                <footer className="text-sm">Sofia Davis</footer>
+              </blockquote>
+            </div>
           </div>
         </div>
         <div className="lg:p-8">
