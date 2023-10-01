@@ -20,6 +20,7 @@ import {
   DialogTrigger,
 } from "@/registry/new-york/ui/dialog";
 import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
+import ListingDetailComponent from "./ListingDetails";
 
 interface ListingProps extends React.HTMLAttributes<HTMLDivElement> {
   listing: Listing;
@@ -144,6 +145,7 @@ export function ListingComponent({
               <DialogDescription>Listing details</DialogDescription>
             </DialogHeader>
             <ScrollArea className="h-[600px]">
+              <ListingDetailComponent />
               <ScrollBar orientation="vertical" />
             </ScrollArea>
           </DialogContent>

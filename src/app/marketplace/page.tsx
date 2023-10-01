@@ -107,7 +107,7 @@ export default function MarketPlacePage() {
       setGoodsClassificationData(goodsClassificationRes.data);
     };
     fetchData().catch(console.error);
-  });
+  }, []);
 
   // let listingData: AllListings = [];
   // let portData: AllPorts = [];
