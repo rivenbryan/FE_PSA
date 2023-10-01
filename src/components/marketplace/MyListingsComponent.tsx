@@ -1,95 +1,143 @@
-import { Button } from "@/registry/new-york/ui/button";
+import Image from "next/image";
+import { cn } from "@/lib/utils";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/registry/new-york/ui/dialog";
-import { Input } from "@/registry/new-york/ui/input";
-import { Label } from "@/registry/new-york/ui/label";
 import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
-import { AddListingForm } from "./AddListingForm";
-import {
-  ContainerType,
-  GoodsClassification,
-  Port,
-} from "@/app/marketplace/page";
-import { cn } from "@/lib/utils";
+import { Listing } from "./ListingComponent";
+import { Button } from "@/registry/new-york/ui/button";
+import axios from "axios";
+// import { useToast } from "@/components/ui/use-toast";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
 
 interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
-  portData: Port[];
-  containerTypes: ContainerType[];
-  goodsClassifications: GoodsClassification[];
+  myListing: Listing;
+  aspectRatio: "portrait" | "square";
+  width: number;
+  height: number;
 }
 
-export function MyListingPage({
-  portData,
-  containerTypes,
-  goodsClassifications,
+export function MyListingComponent({
+  myListing,
+  aspectRatio,
+  width,
+  height,
   className,
+  ...props
 }: MyListingProps) {
-  return (
-    <div
-      className={cn(
-        "flex h-[450px] shrink-0 items-center justify-center rounded-md border border-dashed",
-        className
-      )}
-    >
-      <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
-        <svg
-          fill="#000000"
-          width="46px"
-          height="46px"
-          viewBox="0 0 36 36"
-          version="1.1"
-          preserveAspectRatio="xMidYMid meet"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g
-            id="SVGRepo_tracerCarrier"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          ></g>
-          <g id="SVGRepo_iconCarrier">
-            <path d="M18,2A16,16,0,1,0,34,18,16,16,0,0,0,18,2Zm0,30A14,14,0,1,1,32,18,14,14,0,0,1,18,32Z"></path>
-            <circle cx="25.16" cy="14.28" r="1.8"></circle>
-            <circle cx="11.41" cy="14.28" r="1.8"></circle>
-            <path d="M18.16,20a9,9,0,0,0-7.33,3.78,1,1,0,1,0,1.63,1.16,7,7,0,0,1,11.31-.13,1,1,0,0,0,1.6-1.2A9,9,0,0,0,18.16,20Z"></path>{" "}
-            <rect x="0" y="0" width="36" height="36" fill-opacity="0"></rect>{" "}
-          </g>
-        </svg>
+  let leaveDate = new Date(myListing.leaveDate);
+  let reachDate = new Date(myListing.reachDate);
+  let createDate = new Date(myListing.created_at);
 
-        <h3 className="mt-4 text-lg font-semibold">No episodes added</h3>
-        <p className="mb-4 mt-2 text-sm text-muted-foreground">
-          You have not added any listings. Add one below.
-        </p>
-        <Dialog>
-          <DialogTrigger>
-            <Button size="sm" className="relative">
-              Add Listing
-            </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Add Listing</DialogTitle>
-              <DialogDescription>Fill in the details to add.</DialogDescription>
-            </DialogHeader>
-            <ScrollArea className="h-[600px]">
-              <AddListingForm
-                portData={portData}
-                containerTypes={containerTypes}
-                goodsClassifications={goodsClassifications}
-                className="px-4 flex-grow justify-center"
+  const router = useRouter();
+
+  const handleDelete = () => {
+    axios
+      .delete(
+        `http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/listings/${myListing.id}`
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 200) {
+          console.log("DELETE request successful");
+
+          toast.success("Delete Success", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+          router.replace(window.location.href);
+        }
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the POST request
+        console.error("Error deleting listing", error);
+
+        // Display an error message using toast or other means.
+        toast.error("Error Deleting Listing", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      });
+  };
+
+  return (
+    <div className={cn("space-y-3", className)} {...props}>
+      <Dialog>
+        <DialogTrigger>
+          <div className="rounded-md transition-all hover:shadow-lg hover:scale-[101%]">
+            <div className="overflow-hidden rounded-md">
+              <Image
+                src={`/listingImages/${myListing.id}.jpg`}
+                alt={`${myListing.account} - ${myListing.destPort}`}
+                width={width}
+                height={height}
+                className={cn(
+                  "h-auto w-auto object-cover transition-all hover:scale-105",
+                  aspectRatio === "portrait" ? "aspect-[3/4]" : "aspect-square"
+                )}
               />
-              <ScrollBar />
-            </ScrollArea>
-          </DialogContent>
-        </Dialog>
-      </div>
+            </div>
+
+            <div className="space-y-1 text-sm text-left pt-2 p-1">
+              <h3 className="font-medium leading-none">
+                {myListing.account} - {myListing.destPort}
+              </h3>
+              <p className="text-xs text-muted-foreground">
+                Departure Date: {leaveDate.toLocaleString()}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Arrival Date: {reachDate.toString()}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Listed on: {createDate.toLocaleString()}
+              </p>
+              <p className=" text-xl  font-bold text-right">
+                ${myListing.price}
+                <span className=" text-sm text-muted-foreground font-bold text-right">
+                  / {myListing.cargoSize} TEU
+                </span>
+              </p>
+            </div>
+          </div>
+        </DialogTrigger>
+        <DialogContent className=" min-w-[85%]">
+          <DialogHeader>
+            <DialogTitle>Listing Dialog</DialogTitle>
+            <DialogDescription>Listing details</DialogDescription>
+          </DialogHeader>
+          <ScrollArea className="h-[600px]">
+            <ScrollBar orientation="vertical" />
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
+      <Button
+        variant="destructive"
+        className=" w-[100%] "
+        onClick={(e) => {
+          handleDelete();
+        }}
+      >
+        Delete Listing
+      </Button>
     </div>
   );
 }
