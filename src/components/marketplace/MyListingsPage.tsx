@@ -10,6 +10,7 @@ import { MyListingComponent } from "./MyListingsComponent";
 import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
 
 interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
+  currUser?: any;
   myListings: Listing[];
   portData: Port[];
   containerTypes: ContainerType[];
@@ -17,6 +18,7 @@ interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export function MyListingPage({
+  currUser,
   myListings,
   portData,
   containerTypes,
@@ -50,6 +52,7 @@ export function MyListingPage({
         </ScrollArea>
       ) : (
         <EmptyMyListings
+          currUser={currUser}
           portData={portData}
           containerTypes={containerTypes}
           goodsClassifications={goodsClassifications}

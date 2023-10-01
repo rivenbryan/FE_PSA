@@ -16,12 +16,14 @@ import {
 } from "@/app/marketplace/page";
 
 interface EmptyListingProps extends React.HTMLAttributes<HTMLDivElement> {
+  currUser?: any;
   portData: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
 }
 
 export function EmptyMyListings({
+  currUser,
   portData,
   containerTypes,
   goodsClassifications,
@@ -69,6 +71,7 @@ export function EmptyMyListings({
           </DialogHeader>
           <ScrollArea className="h-[600px]">
             <AddListingForm
+              currUser={currUser}
               portData={portData}
               containerTypes={containerTypes}
               goodsClassifications={goodsClassifications}
