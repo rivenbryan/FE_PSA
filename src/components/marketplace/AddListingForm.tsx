@@ -16,7 +16,6 @@ import { Label } from "@/registry/new-york/ui/label";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "@/registry/new-york/ui/use-toast";
 import {
   Popover,
   PopoverContent,
@@ -28,7 +27,7 @@ import {
   GoodsClassification,
   Port,
 } from "@/app/marketplace/page";
-import { CalendarIcon, CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
+import { CaretSortIcon, CheckIcon } from "@radix-ui/react-icons";
 import {
   Command,
   CommandEmpty,
@@ -38,7 +37,6 @@ import {
 } from "@/registry/new-york/ui/command";
 import { format } from "date-fns";
 import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
-import { Calendar } from "@/registry/new-york/ui/calendar";
 import {
   Select,
   SelectContent,
@@ -46,10 +44,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/registry/new-york/ui/select";
-import Link from "next/link";
+import axios from "axios";
+import router from "next/router";
+import { ToastContainer, toast } from "react-toastify";
+import React from "react";
 
 const addListingFormSchema = z.object({
-  accountName: z
+  leasingOwner: z.any(),
+  account: z
     .string()
     .min(2, {
       message: "Name must be at least 2 characters.",
@@ -67,16 +69,12 @@ const addListingFormSchema = z.object({
   containerType: z.string(),
   typeDangGoods: z.string(),
   price: z.string(),
-  sold: z.boolean(),
 });
 
 type AccountFormValues = z.infer<typeof addListingFormSchema>;
 
 const defaultValues: Partial<AccountFormValues> = {
-  sold: false,
-  // "id": 7,
-  // "created_at": "2023-09-30T07:50:17.316263+00:00",
-  // "leasingOwner": "xiezijian99@gmail.com",
+  leasingOwner: "default",
   // "account": "Wan Hai Lines",
   // "cargoSize": "0.6",
   // "loadPort": "PSA",
@@ -86,37 +84,76 @@ const defaultValues: Partial<AccountFormValues> = {
   // "containerType": "Reefer",
   // "typeDangGoods": "Class1 - Explosives",
   // "price": 200,
-  // "sold": false
 };
 
 interface AddListingFormProps extends React.HTMLAttributes<HTMLDivElement> {
   portData: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
+  currUser?: any;
+  dialogState: any;
 }
 
 export function AddListingForm({
+  dialogState,
+  currUser,
   portData,
   containerTypes,
   goodsClassifications,
   className,
 }: AddListingFormProps) {
+  // const router = useRouter();
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(addListingFormSchema),
     defaultValues,
   });
 
   function onSubmit(data: AccountFormValues) {
+    data.leasingOwner = currUser.email;
     console.log(data);
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    axios
+      .post(
+        "http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/listings",
+        data
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 200) {
+          // Handle the success response here
+          console.log("POST request successful");
+
+          // Optionally, you can display a success message using toast or other means.
+          toast.success("Listing created successfully", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+          dialogState(false);
+        }
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the POST request
+        console.error("Error creating listing", error);
+
+        // Display an error message using toast or other means.
+        toast.error("An error occurred while creating the listing.", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      });
   }
+
   return (
     <div className={className}>
       <Form {...form}>
@@ -126,7 +163,7 @@ export function AddListingForm({
               {/* Account Name */}
               <FormField
                 control={form.control}
-                name="accountName"
+                name="account"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Container Account</FormLabel>
