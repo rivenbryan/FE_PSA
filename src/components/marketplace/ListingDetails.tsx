@@ -39,8 +39,8 @@ export default function ListingDetailComponent({
           className="hidden dark:block"
         />
       </div>
-      <div className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <div className="relative hidden h-[600px] flex-col p-2 bg-muted text-white dark:border-r lg:flex">
+      <div className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-[1200px] lg:grid-cols-2 lg:p-0">
+        <div className="relative hidden h-[580px] flex-col p-2 bg-muted text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
           <div className="relative rounded-b-lg h-[50%] overflow-hidden object-center">
             <Image
@@ -103,14 +103,14 @@ export default function ListingDetailComponent({
             </div>
           </div>
         </div>
-        <div className="lg:p-8">
-          <div className="mx-auto flex min-w-full min-h-[600px] flex-col space-y-6 sm:w-[350px]">
+        <div className="lg:p-0 min-h-[580px] ">
+          <div className="mx-auto flex min-w-full min-h-[580px] flex-col space-y-10 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
-              <h1 className="text-2xl font-semibold tracking-tight">
-                Chat Component
+              <h1 className="text-2xl font-semibold tracking-tight ">
+                Chat with the list owner!
               </h1>
             </div>
-            <div className="min-h-[100%] min-w-full">
+            <div className="p-2">
               <ChatComponent
                 senderEmail={currentUser.email}
                 receiverEmail={listing.leasingOwner}
