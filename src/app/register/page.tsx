@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { supabase } from "@/lib/db";
 import { useRouter } from "next/navigation";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const options = {
   position: "bottom-right",
   autoClose: 5000,
@@ -20,7 +20,7 @@ const options = {
   pauseOnHover: true,
   draggable: true,
   progress: undefined,
-  }
+};
 
 export default function Home() {
   const router = useRouter();
@@ -33,11 +33,11 @@ export default function Home() {
       email: email,
       password: password,
     });
-    
+
     if (error) {
-      console.log(error)
+      console.log(error);
       toast.error(error.message, options);
-      return
+      return;
     }
     console.log("Success");
     router.push("/");
@@ -52,8 +52,15 @@ export default function Home() {
         Enter your email below to create your account
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-[25%]">
-        <Input onChange={(e) => setEmail(e.target.value)} />
-        <Input onChange={(e) => setPassword(e.target.value)} />
+        <Input
+          placeholder="Key in your email.."
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="Key in your password.."
+          onChange={(e) => setPassword(e.target.value)}
+        />
         <Button variant="default">Sign in with Email</Button>
       </form>
       <ToastContainer />

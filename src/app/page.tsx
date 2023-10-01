@@ -18,7 +18,7 @@ import {
 } from "chart.js";
 import { useEffect, useState } from "react";
 import AiModal from "@/components/AiModal";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import CardContentForEnv from "./cardContent/CardContentForEnv";
 import { supabase } from "@/lib/db";
 
@@ -35,18 +35,20 @@ ChartJS.register(
   Legend
 );
 export default function Home() {
-
-  useEffect(() => {
-    console.log("checkandredirect");
-    const checkAndRedirect = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
-      console.log(user);
-    if (user === undefined) {
-      redirect("/login");
+  const router = useRouter()
+  useEffect(()=>{
+    
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user){
+        router.push('/login')
+      }
+      return user
     }
-    }
-    checkAndRedirect().catch(console.error);
-  }, []);
+    fetchUser()
+    
+  },[])
+  
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {

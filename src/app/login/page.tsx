@@ -41,6 +41,7 @@ export default function Home() {
     }
 
     router.push("/");
+    router.refresh()
   };
 
   return (
@@ -52,8 +53,8 @@ export default function Home() {
         Enter your email below to login your account
       </p>
       <form onSubmit={handleSubmit} className="flex flex-col gap-2 w-[25%]">
-        <Input onChange={(e) => setEmail(e.target.value)} />
-        <Input onChange={(e) => setPassword(e.target.value)} />
+        <Input placeholder="Key in your email.." onChange={(e) => setEmail(e.target.value)} />
+        <Input type="password" placeholder="Key in your password.." onChange={(e) => setPassword(e.target.value)} />
         <Button variant="default">Login with Email</Button>
         <ToastContainer />
       </form>

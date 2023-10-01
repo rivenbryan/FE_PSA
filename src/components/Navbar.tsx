@@ -1,9 +1,35 @@
 "use client";
+import { supabase } from "@/lib/db";
+import { tr } from "date-fns/locale";
 import Image from "next/image";
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [userLoggedIn, setUserLoggedIn] = useState(true);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserLoggedIn(true);
+      }
+
+      if (!user) {
+        setUserLoggedIn(false);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    router.refresh();
+    return;
+  };
 
   return (
     <nav className="bg-white p-4 shadow-md">
@@ -22,9 +48,9 @@ const Navbar = () => {
             <a href="/inbox" className="text-black">
               Inbox
             </a>
-            <a href="/inbox" className="text-black">
+            {!userLoggedIn ? <></> : <a onClick={handleSignOut} href="/" className="text-black">
               Sign Out
-            </a>
+            </a>}
           </div>
           <button
             onClick={() => setIsOpen(!isOpen)}
