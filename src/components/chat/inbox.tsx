@@ -15,7 +15,7 @@ type Chat = {
 };
 
 export default function Inbox() {
-  const API_URL='http://localhost:3000';
+  const API_URL='http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000';
   const [chats, setChats] = useState<Chat[]>([]);
   const [userEmail, setUserEmail] = useState<string>('');
   // Function to fetch chat data

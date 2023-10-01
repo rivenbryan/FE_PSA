@@ -5,6 +5,7 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/registry/new-york/ui/button";
 import { Listing } from "./ListingComponent";
+import ChatComponent from "../chat/chat";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -13,10 +14,12 @@ export const metadata: Metadata = {
 
 interface ListingDetailsProp extends React.HTMLAttributes<HTMLDivElement> {
   listing: Listing;
+  currentUser: any;
 }
 
 export default function ListingDetailComponent({
   listing,
+  currentUser,
 }: ListingDetailsProp) {
   return (
     <>
@@ -101,15 +104,19 @@ export default function ListingDetailComponent({
           </div>
         </div>
         <div className="lg:p-8">
-          <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
+          <div className="mx-auto flex min-w-full min-h-[600px] flex-col space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
                 Chat Component
               </h1>
             </div>
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              placeholder
-            </p>
+            <div className="min-h-[100%] min-w-full">
+              <ChatComponent
+                senderEmail={currentUser.email}
+                receiverEmail={listing.leasingOwner}
+                listingId={listing.id}
+              />
+            </div>
           </div>
         </div>
       </div>

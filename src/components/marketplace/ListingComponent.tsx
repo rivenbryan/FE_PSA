@@ -23,6 +23,7 @@ import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
 import ListingDetailComponent from "./ListingDetails";
 
 interface ListingProps extends React.HTMLAttributes<HTMLDivElement> {
+  currentUser: any;
   listing: Listing;
   aspectRatio?: "portrait" | "square";
   width?: number;
@@ -62,6 +63,7 @@ export interface ListingInterface {
 }
 
 export function ListingComponent({
+  currentUser,
   listing,
   aspectRatio = "portrait",
   width,
@@ -139,13 +141,9 @@ export function ListingComponent({
               </p>
             </div>
           </DialogTrigger>
-          <DialogContent className=" min-w-[85%]">
-            <DialogHeader>
-              <DialogTitle>Listing Dialog</DialogTitle>
-              <DialogDescription>Listing details</DialogDescription>
-            </DialogHeader>
+          <DialogContent className="min-w-[60%] max-w-[1100px]">
             <ScrollArea className="h-[600px]">
-              <ListingDetailComponent listing={listing} />
+              <ListingDetailComponent currentUser={currentUser} listing={listing} />
               <ScrollBar orientation="vertical" />
             </ScrollArea>
           </DialogContent>

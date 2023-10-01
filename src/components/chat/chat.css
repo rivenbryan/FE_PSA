@@ -82,14 +82,17 @@
   background-color: #00249b; /* Darker background color on hover */
 }
 .message-container {
-  height: 400px; /* Set the height to 72 pixels */
+   /* Set the height to 72 pixels */
+  min-height: 400px;
   padding: 20px;
   padding-bottom: 0;
 }
 
 
 .chat-continer{
-  width: 250px;
+  width: 100%;
+  min-height: 100px;
+  height:  relative;
   display: flex;
   align-items: center;
   justify-content: center

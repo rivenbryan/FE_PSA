@@ -282,6 +282,7 @@ export default function MarketPlacePage() {
                           <div className="flex justify-between pb-4 flex-wrap mr-5">
                             {listingDataDisplaying.map((listing) => (
                               <ListingComponent
+                                currentUser={currUser}
                                 key={listing.id}
                                 listing={listing}
                                 className="w-[280px] pb-5"
@@ -308,6 +309,7 @@ export default function MarketPlacePage() {
                           <div className="flex space-x-4 pb-4">
                             {listingDataLeavingSoon.map((listing) => (
                               <ListingComponent
+                                currentUser={currUser}
                                 key={listing.id}
                                 listing={listing}
                                 className="w-[220px]"
