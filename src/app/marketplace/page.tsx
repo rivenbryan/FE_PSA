@@ -88,6 +88,7 @@ export default function MarketPlacePage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("fetching data");
       const {
         data: { user },
       } = await supabase.auth.getUser();
