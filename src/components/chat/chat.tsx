@@ -1,12 +1,13 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef  } from 'react';
 import { useRouter } from "next/navigation";
 // eslint-disable-next-line
-
+import { RocketIcon } from '@radix-ui/react-icons';
 import { io, Socket } from 'socket.io-client';
 import { useSearchParams } from 'next/navigation'
 import axios from 'axios'; // Import Axios
 import './chat.css'; 
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 
 type Chat = {
@@ -28,6 +29,7 @@ export default function ChatComponent() {
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
   const [socket, setSocket] = useState<Socket | null>(null); // Initialize as null
   const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
+  const scrollableContainerRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
     // Fetch all chats and list senderEmails in previousChats
     axios.get(`${API_URL}/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
@@ -71,6 +73,13 @@ export default function ChatComponent() {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
   }, [socket]);
+  const handleKeyDown = (e: any) => {
+    console.log('enteresd')
+    if (e.code === "Enter") {
+     
+      handleSendMessage();
+    }
+  };
 
   const handleSendMessage = () => {
     if (newMessage.trim() !== '') {
@@ -98,37 +107,61 @@ export default function ChatComponent() {
     }
   }
 
+
+  const scrollToBottom = () => {
+    if (scrollableContainerRef.current) {
+      scrollableContainerRef.current.scrollTop =
+        scrollableContainerRef.current.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    console.log('test')
+    scrollToBottom();
+  }, [combinedMessages, newMessage]);
+
   return (
     <div className="chat-container">
+       <h2>{receiverEmail}</h2>
+      <ScrollArea ref={scrollableContainerRef} className="message-container">
       <div className="previous-chats">
-      <h2>Combined Messages</h2>
         {combinedMessages.map((message: Chat, index: number) => (
           <div
           key={index}
-          className={`message ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
-            <span>{message.senderEmail}:</span> 
-            <span>{message.messageContent}</span>
-            <span>{new Date(message.timestamp).toLocaleString()}</span>
+          className={`message-bubble ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
+            <div className='message-content'>
+            {!(message.senderEmail === senderEmail) && (
+          <span className='name'>{message.senderEmail} </span>)}
+            <div>{message.messageContent}</div>
+            <div className="timestamp">{new Date(message.timestamp).toLocaleString()}</div>
+            </div>
           </div>
         ))}
       </div>
       <div className="chat-messages">
         {messages.map((message: Chat, index: number) => (
-        <div key={index} className={`message ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
-            <span>{message.senderEmail}: </span>
-            <span>{message.messageContent}</span>
-            <span>{new Date(message.timestamp).toLocaleString()}</span>
+        <div key={index} className={`message-bubble ${message.senderEmail === senderEmail ? 'sender-message' : 'receiver-message'}`}>
+          <div className='message-content'>
+          {!(message.senderEmail === senderEmail) && (
+          <span className='name'>{message.senderEmail} </span>)}
+            <div>{message.messageContent}</div>
+            <div className="timestamp">{new Date(message.timestamp).toLocaleString()}</div>
+            </div>
           </div>
         ))}
       </div>
+      </ScrollArea>
       <div className="chat-input">
         <input
           type="text"
           placeholder="Type a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
-        <button onClick={handleSendMessage}>Send</button>
+        <button onClick={handleSendMessage} >
+          <i className="fa fa-paper-plane"></i> <RocketIcon/>
+        </button>
       </div>
     </div>
   );
