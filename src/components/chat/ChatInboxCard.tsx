@@ -5,11 +5,12 @@ import Image from 'next/image';
 type Props = {
   chat?: any;
   setChatID: any;
+  setPollState?: any;
 };
 
-export default function ChatInboxCard({ chat, setChatID }: Props) {
+export default function ChatInboxCard({ chat, setChatID, setPollState }: Props) {
   const handleClick = () => {
-    console.log("Clicked!");
+    setPollState((prev: boolean) => {return !prev;});
     const chatID = {
       listingID: chat.listingId,
       receiverID: chat.senderEmail,

@@ -23,48 +23,37 @@ type Chat = {
   id: number;
 };
 
-<<<<<<< HEAD
 interface ChatComponentProp extends React.HTMLAttributes<HTMLDivElement> {
   senderEmail:string;
   receiverEmail:string;
-  listingId:number
+  listingId:number;
+  pollState?: boolean;
 }
 
-export default function ChatComponent( {senderEmail, receiverEmail, listingId}:ChatComponentProp) {
-=======
-export default function ChatComponent({senderEmail, receiverEmail, listingId}: Props) {
-  console.log("Chat Component");
->>>>>>> d3e9b8fcdd899185600ca5c5f7e91471a9e65b91
-  const API_URL='http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000';
+export default function ChatComponent( {senderEmail, receiverEmail, listingId, pollState}:ChatComponentProp) {
+  const API_URL='http://localhost:3000';
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
   const [socket, setSocket] = useState<Socket | null>(null); // Initialize as null
   const [combinedMessages, setCombinedMessages] = useState<Chat[]>([]); // Combined and sorted messages
   const chatHistoryRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
-  useEffect(() => {
-    if (scrollRef.current) {
-      const element = scrollRef.current;
-      const lastChild = element.lastElementChild;
 
-      // Check if lastChild exists before setting the scroll position
-      if (lastChild) {
-        // Use the scrollIntoView method to scroll to the lastChild
-        lastChild.scrollIntoView();
-      }
-    }
-  }, [combinedMessages,newMessage])
   useEffect(() => {
     // Fetch all chats and list senderEmails in previousChats
+    
+    console.log('test')
     axios.get(`${API_URL}/api/v1/chat?senderEmail=${senderEmail}&receiverEmail=${receiverEmail}&listingId=${listingId}`)
       .then((response) => {
         const chatData = response.data;
         setCombinedMessages(chatData);
+        console.log(chatData);
+        console.log('test')
       })
       .catch((error) => {
         console.error('Error fetching chat data:', error);
       });
-  }, []);
+  }, [pollState]);
   useEffect(() => {
     if (senderEmail) {
       // Connect to the WebSocket server when userEmail is set
@@ -87,7 +76,7 @@ export default function ChatComponent({senderEmail, receiverEmail, listingId}: P
         newSocket.disconnect();
       };
     }
-  }, [senderEmail]);
+  }, [pollState]);
 
   useEffect(() => {
     if (!socket) return;
@@ -133,10 +122,7 @@ export default function ChatComponent({senderEmail, receiverEmail, listingId}: P
 
   return (
     <div className="chat-container">
-<<<<<<< HEAD
        <div className='header'>{receiverEmail}</div>
-=======
->>>>>>> d3e9b8fcdd899185600ca5c5f7e91471a9e65b91
       <ScrollArea className="message-container" ref={scrollRef}>
       <div className="previous-chats" ref={chatHistoryRef}>
         {combinedMessages.map((message: Chat, index: number) => (
