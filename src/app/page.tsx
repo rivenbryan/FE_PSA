@@ -16,10 +16,11 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AiModal from "@/components/AiModal";
 import { redirect } from "next/navigation";
 import CardContentForEnv from "./cardContent/CardContentForEnv";
+import { supabase } from "@/lib/db";
 
 
 
@@ -35,7 +36,17 @@ ChartJS.register(
 );
 export default function Home() {
 
-  
+  useEffect(() => {
+    console.log("checkandredirect");
+    const checkAndRedirect = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      console.log(user);
+    if (user === undefined) {
+      redirect("/login");
+    }
+    }
+    checkAndRedirect().catch(console.error);
+  }, []);
   const [open, setOpen] = useState(false);
 
   const handleClick = () => {
