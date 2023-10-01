@@ -35,6 +35,7 @@ import { AddListingForm } from "@/components/marketplace/AddListingForm";
 import { supabase } from "@/lib/db";
 import { useUser } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 
 export type Port = {
   UNLocode: string;
@@ -69,6 +70,7 @@ export interface AllGoodsClassificationInterface
   extends Array<GoodsClassificationInterface> {}
 
 export default function MarketPlacePage() {
+  const [diaOpen, setDiaOpen] = useState(false);
   const [currUser, setCurrUser] = useState([]);
   const [listingData, setListingData] = useState<AllListingsInterface>([]);
   const [portData, setPortData] = useState<AllPortsInterface>([]);
@@ -105,7 +107,7 @@ export default function MarketPlacePage() {
       setGoodsClassificationData(goodsClassificationRes.data);
     };
     fetchData().catch(console.error);
-  }, []);
+  });
 
   // let listingData: AllListings = [];
   // let portData: AllPorts = [];
@@ -196,7 +198,7 @@ export default function MarketPlacePage() {
                         </TabsTrigger>
                       </TabsList>
                       <div className="ml-auto mr-4">
-                        <Dialog>
+                        <Dialog open={diaOpen} onOpenChange={setDiaOpen}>
                           <DialogTrigger>
                             <Button>
                               <PlusCircledIcon className="mr-2 h-4 w-4" />
@@ -212,6 +214,8 @@ export default function MarketPlacePage() {
                             </DialogHeader>
                             <ScrollArea className="h-[600px]">
                               <AddListingForm
+                                dialogState={setDiaOpen}
+                                currUser={currUser}
                                 portData={portData}
                                 containerTypes={containerTypesData}
                                 goodsClassifications={goodsClassificationData}
@@ -298,6 +302,7 @@ export default function MarketPlacePage() {
                       </div>
                       <Separator className="my-4" />
                       <MyListingPage
+                        currUser={currUser}
                         myListings={myListingsData}
                         portData={portData}
                         containerTypes={containerTypesData}
@@ -310,6 +315,7 @@ export default function MarketPlacePage() {
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

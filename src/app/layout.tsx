@@ -3,6 +3,8 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import Container from "@/components/Container";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Navbar />
         <Container>{children}</Container>
+        <Toaster />
       </body>
     </html>
   );

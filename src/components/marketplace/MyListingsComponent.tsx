@@ -1,16 +1,5 @@
 import Image from "next/image";
-import { ChatBubbleIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 import { cn } from "@/lib/utils";
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
-  ContextMenuTrigger,
-} from "@/registry/new-york/ui/context-menu";
 import {
   Dialog,
   DialogContent,
@@ -22,6 +11,11 @@ import {
 import { ScrollArea, ScrollBar } from "@/registry/new-york/ui/scroll-area";
 import { Listing } from "./ListingComponent";
 import { Button } from "@/registry/new-york/ui/button";
+import axios from "axios";
+// import { useToast } from "@/components/ui/use-toast";
+import { ToastContainer, toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import "react-toastify/dist/ReactToastify.css";
 
 interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
   myListing: Listing;
@@ -41,6 +35,49 @@ export function MyListingComponent({
   let leaveDate = new Date(myListing.leaveDate);
   let reachDate = new Date(myListing.reachDate);
   let createDate = new Date(myListing.created_at);
+
+  const router = useRouter();
+
+  const handleDelete = () => {
+    axios
+      .delete(
+        `http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/listings/${myListing.id}`
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 200) {
+          console.log("DELETE request successful");
+
+          toast.success("Delete Success", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+          router.replace(window.location.href);
+        }
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the POST request
+        console.error("Error deleting listing", error);
+
+        // Display an error message using toast or other means.
+        toast.error("Error Deleting Listing", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      });
+  };
 
   return (
     <div className={cn("space-y-3", className)} {...props}>
@@ -92,7 +129,13 @@ export function MyListingComponent({
           </ScrollArea>
         </DialogContent>
       </Dialog>
-      <Button className=" bg-red-700 w-[100%] hover:bg-red-400">
+      <Button
+        variant="destructive"
+        className=" w-[100%] "
+        onClick={(e) => {
+          handleDelete();
+        }}
+      >
         Delete Listing
       </Button>
     </div>
