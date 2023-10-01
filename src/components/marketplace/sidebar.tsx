@@ -1,19 +1,23 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/registry/new-york/ui/button";
 import { ScrollArea } from "@/registry/new-york/ui/scroll-area";
-import { useRouter } from "next/router";
 import {
   ContainerType,
   GoodsClassification,
   Port,
 } from "@/app/marketplace/page";
 import { DestPortFilter } from "./destinationPortFilter";
-import { CheckIcon } from "@radix-ui/react-icons";
+import { CheckIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {
   destPorts: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
+  destPortFilter: any;
+  setDestPortFilter: any;
+  containerTypeFilter: string;
+  setContainerTypeFilter: any;
+  setGoodsClassificationFilter: any;
 }
 
 export function Sidebar({
@@ -21,6 +25,11 @@ export function Sidebar({
   goodsClassifications,
   destPorts,
   containerTypes,
+  destPortFilter,
+  setDestPortFilter,
+  containerTypeFilter,
+  setContainerTypeFilter,
+  setGoodsClassificationFilter,
 }: SidebarProps) {
   //   const router = useRouter();
 
@@ -35,37 +44,28 @@ export function Sidebar({
   return (
     <div className={cn("pb-12", className)}>
       <div className="space-y-4 py-4">
+        <div className="px-6 py-2 ml-1">
+          <Button
+            className="w-[100%]"
+            onClick={(e) => {
+              setDestPortFilter("");
+              setContainerTypeFilter("");
+            }}
+          >
+            <CrossCircledIcon className="mr-2" />
+            Clear Filters
+          </Button>
+        </div>
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Destination Port
           </h2>
           <div className="space-y-1">
-            {/* {destPorts?.map((destPort, i) => (
-                <Button
-                  variant="secondary"
-                  className=" pl-6 w-full justify-start"
-                  // onClick={() => handleDestPortFilter(destPort.name)}
-                >
-                  <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-2 h-4 w-4"
-                >
-                  <circle cx="12" cy="12" r="10" />
-                  <polygon points="10 8 16 12 10 16 10 8" />
-                </svg> 
-                  {destPort.name}
-                </Button>
-            ))}
-             */}
             <DestPortFilter
+              destPortFilter={destPortFilter}
               className=" pl-6 w-full justify-start"
               portData={destPorts}
+              setDestPortFilter={setDestPortFilter}
             />
           </div>
         </div>
@@ -74,15 +74,32 @@ export function Sidebar({
             Container Type
           </h2>
           <div className="space-y-1">
-            {containerTypes.map((containerType) => (
-              <Button
-                key={containerType.type}
-                variant="ghost"
-                className="pl-6 w-full justify-start"
-              >
-                {containerType.type}
-              </Button>
-            ))}
+            {containerTypes.map((containerType) =>
+              containerType.type === containerTypeFilter ? (
+                <Button
+                  key={containerType.type}
+                  variant="default"
+                  disabled
+                  className="pl-6 w-full justify-start"
+                  onClick={(e) => {
+                    setContainerTypeFilter(containerType.type);
+                  }}
+                >
+                  {containerType.type}
+                </Button>
+              ) : (
+                <Button
+                  key={containerType.type}
+                  variant="ghost"
+                  className="pl-6 w-full justify-start"
+                  onClick={(e) => {
+                    setContainerTypeFilter(containerType.type);
+                  }}
+                >
+                  {containerType.type}
+                </Button>
+              )
+            )}
           </div>
         </div>
         <div className="py-2">

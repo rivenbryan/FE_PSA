@@ -20,9 +20,11 @@ interface EmptyListingProps extends React.HTMLAttributes<HTMLDivElement> {
   portData: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
+  dialogState: any;
 }
 
 export function EmptyMyListings({
+  dialogState,
   currUser,
   portData,
   containerTypes,
@@ -71,6 +73,7 @@ export function EmptyMyListings({
           </DialogHeader>
           <ScrollArea className="h-[600px]">
             <AddListingForm
+              dialogState={dialogState}
               currUser={currUser}
               portData={portData}
               containerTypes={containerTypes}
