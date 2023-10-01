@@ -80,6 +80,50 @@ export function MyListingComponent({
       });
   };
 
+  const handleSold = () => {
+    console.log("selling");
+    axios
+      .patch(
+        `http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/listings/sell/${myListing.id}`
+      )
+      .then((response) => {
+        console.log(response);
+        if (response.data.status === 200) {
+          console.log("Sold request successful");
+
+          toast.success("Marked as SOLD!", {
+            position: "bottom-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: false,
+            progress: undefined,
+            theme: "light",
+          });
+          deleteFlag((prev: boolean) => {
+            return !prev;
+          });
+        }
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the POST request
+        console.error("Error patching listing", error);
+
+        // Display an error message using toast or other means.
+        toast.error("Error occurred", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: false,
+          progress: undefined,
+          theme: "light",
+        });
+      });
+  };
+
   return (
     <div className={cn("space-y-3", className)} {...props}>
       <Dialog>
@@ -129,7 +173,16 @@ export function MyListingComponent({
             <ScrollBar orientation="vertical" />
           </ScrollArea>
         </DialogContent>
-      </Dialog>
+      </Dialog>{" "}
+      <Button
+        variant="default"
+        className=" w-[100%] "
+        onClick={(e) => {
+          handleSold();
+        }}
+      >
+        Sold
+      </Button>
       <Button
         variant="destructive"
         className=" w-[100%] "
