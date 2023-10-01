@@ -96,7 +96,13 @@ export default function MarketPlacePage() {
       const listingRes = await axios.get(
         "http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/listings"
       );
-      setListingData(listingRes.data);
+      const tempListingdata: AllListings = listingRes.data;
+      const availableListing: AllListings = tempListingdata.filter(
+        (listing) => {
+          return listing.sold === false;
+        }
+      );
+      setListingData(availableListing);
 
       const portRes = await axios.get(
         "http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000/api/v1/ports"
