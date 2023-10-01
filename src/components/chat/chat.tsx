@@ -23,8 +23,18 @@ type Chat = {
   id: number;
 };
 
+<<<<<<< HEAD
+interface ChatComponentProp extends React.HTMLAttributes<HTMLDivElement> {
+  senderEmail:string;
+  receiverEmail:string;
+  listingId:number
+}
+
+export default function ChatComponent( {senderEmail, receiverEmail, listingId}:ChatComponentProp) {
+=======
 export default function ChatComponent({senderEmail, receiverEmail, listingId}: Props) {
   console.log("Chat Component");
+>>>>>>> d3e9b8fcdd899185600ca5c5f7e91471a9e65b91
   const API_URL='http://ec2-54-169-206-36.ap-southeast-1.compute.amazonaws.com:3000';
   const [messages, setMessages] = useState<Chat[]>([]); // Initialize as an empty array
   const [newMessage, setNewMessage] = useState<string>(''); // Initialize as an empty string
@@ -33,8 +43,8 @@ export default function ChatComponent({senderEmail, receiverEmail, listingId}: P
   const chatHistoryRef = useRef<HTMLDivElement | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
-    if (chatHistoryRef.current) {
-      const element = chatHistoryRef.current;
+    if (scrollRef.current) {
+      const element = scrollRef.current;
       const lastChild = element.lastElementChild;
 
       // Check if lastChild exists before setting the scroll position
@@ -88,7 +98,6 @@ export default function ChatComponent({senderEmail, receiverEmail, listingId}: P
     });
   }, [socket]);
   const handleKeyDown = (e: any) => {
-    console.log('enteresd')
     if (e.code === "Enter") {
      
       handleSendMessage();
@@ -124,6 +133,10 @@ export default function ChatComponent({senderEmail, receiverEmail, listingId}: P
 
   return (
     <div className="chat-container">
+<<<<<<< HEAD
+       <div className='header'>{receiverEmail}</div>
+=======
+>>>>>>> d3e9b8fcdd899185600ca5c5f7e91471a9e65b91
       <ScrollArea className="message-container" ref={scrollRef}>
       <div className="previous-chats" ref={chatHistoryRef}>
         {combinedMessages.map((message: Chat, index: number) => (

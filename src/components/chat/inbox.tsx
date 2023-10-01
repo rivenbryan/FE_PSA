@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Link from "next/link";
 import { useQuery } from "react-query";
 import ChatInboxCard from "./ChatInboxCard";
 import ChatComponent from "./chat";
@@ -13,7 +12,7 @@ type Chat = {
   messageContent: string;
   timestamp: any;
   id: number;
-  listingId: number;
+  listingId: any;
 };
 
 export default function Inbox() {

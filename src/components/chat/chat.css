@@ -82,18 +82,26 @@
   background-color: #00249b; /* Darker background color on hover */
 }
 .message-container {
-  height: 400px; /* Set the height to 72 pixels */
+   /* Set the height to 72 pixels */
+  min-height: 400px;
   padding: 20px;
   padding-bottom: 0;
-  overscroll-behavior-y: contain;
-  scroll-snap-type: y proximity;
-
 }
 
-.message-container > div > div:last-child {
-  scroll-snap-align: end;
-}
 
 .chat-continer{
-  width: 250px;
+  width: 100%;
+  min-height: 100px;
+  height:  relative;
+  display: flex;
+  align-items: center;
+  justify-content: center
+}
+.header {
+  display: flex;
+  align-self: center;
+  align-content: center;
+  justify-content: center;
+  font-weight: bold;
+  padding: 10px;
 }
