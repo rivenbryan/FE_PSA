@@ -4,13 +4,20 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/registry/new-york/ui/button";
+import { Listing } from "./ListingComponent";
 
 export const metadata: Metadata = {
   title: "Authentication",
   description: "Authentication forms built using the components.",
 };
 
-export default function ListingDetailComponent() {
+interface ListingDetailsProp extends React.HTMLAttributes<HTMLDivElement> {
+  listing: Listing;
+}
+
+export default function ListingDetailComponent({
+  listing,
+}: ListingDetailsProp) {
   return (
     <>
       <div className="md:hidden">
@@ -32,7 +39,16 @@ export default function ListingDetailComponent() {
       <div className="container relative hidden h-[600px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
           <div className="absolute inset-0 bg-zinc-900" />
-          <div className="relative z-20 flex items-center text-lg font-medium">
+          <div className="absolute inset-1 rounded-b-lg max-h-[50%] overflow-hidden object-center">
+            <Image
+              src={`/listingImages/${listing.id}.jpg`}
+              alt={`${listing.account} - ${listing.destPort}`}
+              width={500}
+              height={300}
+              className="h-auto w-auto object-cover transition-all hover:scale-105naspect-[3/4]"
+            />
+          </div>
+          <div className="relative mt-auto z-10 flex items-center text-lg font-medium">
             Listing Details
           </div>
           <div className="relative z-20 mt-auto">

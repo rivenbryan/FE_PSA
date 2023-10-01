@@ -145,7 +145,7 @@ export function ListingComponent({
               <DialogDescription>Listing details</DialogDescription>
             </DialogHeader>
             <ScrollArea className="h-[600px]">
-              <ListingDetailComponent />
+              <ListingDetailComponent listing={listing} />
               <ScrollBar orientation="vertical" />
             </ScrollArea>
           </DialogContent>
