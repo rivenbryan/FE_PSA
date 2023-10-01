@@ -70,7 +70,14 @@ export interface AllGoodsClassificationInterface
   extends Array<GoodsClassificationInterface> {}
 
 export default function MarketPlacePage() {
+  console.log("rendering");
+  const [deleteFlag, setDeleteFlag] = useState(false);
   const [diaOpen, setDiaOpen] = useState(false);
+  const [destPortFilter, setDestPortFilter] = useState("");
+  const [containerTypeFilter, setContainerTypeFilter] = useState("");
+  const [goodsClassificationFilter, setGoodsClassificationFilter] = useState(
+    []
+  );
   const [currUser, setCurrUser] = useState([]);
   const [listingData, setListingData] = useState<AllListingsInterface>([]);
   const [portData, setPortData] = useState<AllPortsInterface>([]);
@@ -81,6 +88,7 @@ export default function MarketPlacePage() {
 
   useEffect(() => {
     const fetchData = async () => {
+      console.log("fetching data");
       const {
         data: { user },
       } = await supabase.auth.getUser();
@@ -107,7 +115,7 @@ export default function MarketPlacePage() {
       setGoodsClassificationData(goodsClassificationRes.data);
     };
     fetchData().catch(console.error);
-  });
+  }, [diaOpen, deleteFlag]);
 
   // let listingData: AllListings = [];
   // let portData: AllPorts = [];
@@ -136,6 +144,28 @@ export default function MarketPlacePage() {
   // } catch (err) {
   //   console.error(err);
   // }
+  const updateDestPortFilter = (selectedPorts: string) => {
+    setDestPortFilter(selectedPorts);
+  };
+
+  const updateContainerTypeFilter = (selectedContainerTypeFilter: string) => {
+    setContainerTypeFilter(selectedContainerTypeFilter);
+  };
+
+  const listingDataDisplaying = listingData.filter((listing) => {
+    if (destPortFilter !== "" && containerTypeFilter !== "") {
+      return (
+        listing.destPort.includes(destPortFilter) &&
+        listing.containerType.includes(containerTypeFilter)
+      );
+    } else if (destPortFilter !== "") {
+      return listing.destPort.includes(destPortFilter);
+    } else if (containerTypeFilter !== "") {
+      return listing.containerType.includes(containerTypeFilter);
+    } else {
+      return true;
+    }
+  });
 
   const today = new Date();
   const thresholdDate = new Date();
@@ -180,6 +210,11 @@ export default function MarketPlacePage() {
                 goodsClassifications={goodsClassificationData}
                 destPorts={portData}
                 containerTypes={containerTypesData}
+                destPortFilter={destPortFilter}
+                setDestPortFilter={updateDestPortFilter}
+                containerTypeFilter={containerTypeFilter}
+                setContainerTypeFilter={updateContainerTypeFilter}
+                setGoodsClassificationFilter={setGoodsClassificationFilter}
                 className="hidden lg:block"
               />
               <div className="col-span-3 lg:col-span-4 lg:border-l">
@@ -245,7 +280,7 @@ export default function MarketPlacePage() {
                       <div className="relative">
                         <ScrollArea className="px-1 h-[600px]">
                           <div className="flex justify-between pb-4 flex-wrap mr-5">
-                            {listingData.map((listing) => (
+                            {listingDataDisplaying.map((listing) => (
                               <ListingComponent
                                 key={listing.id}
                                 listing={listing}
@@ -302,6 +337,8 @@ export default function MarketPlacePage() {
                       </div>
                       <Separator className="my-4" />
                       <MyListingPage
+                        deleteFlag={setDeleteFlag}
+                        dialogState={setDiaOpen}
                         currUser={currUser}
                         myListings={myListingsData}
                         portData={portData}

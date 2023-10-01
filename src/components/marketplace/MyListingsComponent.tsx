@@ -13,8 +13,7 @@ import { Listing } from "./ListingComponent";
 import { Button } from "@/registry/new-york/ui/button";
 import axios from "axios";
 // import { useToast } from "@/components/ui/use-toast";
-import { ToastContainer, toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -22,9 +21,11 @@ interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
   aspectRatio: "portrait" | "square";
   width: number;
   height: number;
+  deleteFlag: any;
 }
 
 export function MyListingComponent({
+  deleteFlag,
   myListing,
   aspectRatio,
   width,
@@ -35,8 +36,6 @@ export function MyListingComponent({
   let leaveDate = new Date(myListing.leaveDate);
   let reachDate = new Date(myListing.reachDate);
   let createDate = new Date(myListing.created_at);
-
-  const router = useRouter();
 
   const handleDelete = () => {
     axios
@@ -58,7 +57,9 @@ export function MyListingComponent({
             progress: undefined,
             theme: "light",
           });
-          router.replace(window.location.href);
+          deleteFlag((prev: boolean) => {
+            return !prev;
+          });
         }
       })
       .catch((error) => {

@@ -15,9 +15,13 @@ interface MyListingProps extends React.HTMLAttributes<HTMLDivElement> {
   portData: Port[];
   containerTypes: ContainerType[];
   goodsClassifications: GoodsClassification[];
+  dialogState: any;
+  deleteFlag: any;
 }
 
 export function MyListingPage({
+  deleteFlag,
+  dialogState,
   currUser,
   myListings,
   portData,
@@ -39,6 +43,7 @@ export function MyListingPage({
               return (
                 <MyListingComponent
                   key={listing.id}
+                  deleteFlag={deleteFlag}
                   myListing={listing}
                   width={250}
                   height={250}
@@ -52,6 +57,7 @@ export function MyListingPage({
         </ScrollArea>
       ) : (
         <EmptyMyListings
+          dialogState={dialogState}
           currUser={currUser}
           portData={portData}
           containerTypes={containerTypes}
